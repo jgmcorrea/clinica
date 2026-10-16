@@ -1,0 +1,982 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Clínica Marcela & Rafaela</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: sidebar com três "consultórios" (Clínica, Dra. Marcela, Dra. Rafaela), cada um com sua cor; conteúdo em painéis */
+:root{
+  --bg:#F4F5F3; --surface:#FFFFFF; --sunk:#ECEEEB; --ink:#1E1D20; --muted:#6B6A70; --line:#DCDEDA;
+  --marcela:#8E5458; --marcela-soft:#F3E7E7;
+  --rafaela:#3C7468; --rafaela-soft:#E3F0EC;
+  --clinica:#3D4B63; --clinica-soft:#E5E9F0;
+  --ok:#2F7D4F; --ok-soft:#E2F2E8; --warn:#A86A12; --warn-soft:#FBF0DC; --bad:#B03A3A; --bad-soft:#F8E3E3;
+  --display:"Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --body:"Manrope", "Segoe UI", system-ui, sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141416; --surface:#1C1C1F; --sunk:#232327; --ink:#ECEBEE; --muted:#A2A1A8; --line:#313136;
+  --marcela:#D4999C; --marcela-soft:#3A2729; --rafaela:#86C2B4; --rafaela-soft:#1F3330; --clinica:#9FB0CC; --clinica-soft:#262D3A;
+  --ok:#6FC891; --ok-soft:#1D3326; --warn:#E3AE5C; --warn-soft:#3A2E1A; --bad:#EA8B8B; --bad-soft:#3D2222; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141416; --surface:#1C1C1F; --sunk:#232327; --ink:#ECEBEE; --muted:#A2A1A8; --line:#313136;
+  --marcela:#D4999C; --marcela-soft:#3A2729; --rafaela:#86C2B4; --rafaela-soft:#1F3330; --clinica:#9FB0CC; --clinica-soft:#262D3A;
+  --ok:#6FC891; --ok-soft:#1D3326; --warn:#E3AE5C; --warn-soft:#3A2E1A; --bad:#EA8B8B; --bad-soft:#3D2222; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.5}
+.num{font-variant-numeric:tabular-nums}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+aside{background:var(--surface);border-right:1px solid var(--line);padding:22px 14px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{padding:0 10px 18px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.brand b{font-family:var(--display);font-size:24px;font-weight:600;display:block;line-height:1.1}
+.brand span{color:var(--muted);font-size:12px}
+.grp{margin:14px 0 4px;padding:0 10px;font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);display:flex;align-items:center;gap:8px}
+.grp i{width:8px;height:8px;border-radius:50%;display:inline-block}
+nav button{all:unset;display:block;width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--ink);font-weight:500}
+nav button:hover{background:var(--sunk)}
+nav button:focus-visible{outline:2px solid var(--clinica);outline-offset:1px}
+nav button.on{background:var(--sunk);font-weight:700}
+nav button.on[data-c="marcela"]{background:var(--marcela-soft);color:var(--marcela)}
+nav button.on[data-c="rafaela"]{background:var(--rafaela-soft);color:var(--rafaela)}
+nav button.on[data-c="clinica"]{background:var(--clinica-soft);color:var(--clinica)}
+.demo{margin:20px 10px 0;font-size:12px;color:var(--muted);background:var(--sunk);padding:10px;border-radius:8px}
+main{padding-block:26px 60px;padding-left:max(28px, env(safe-area-inset-left,0px));padding-right:max(28px, env(safe-area-inset-right,0px));min-width:0}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:20px}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:700}
+h1{font-family:var(--display);font-weight:600;font-size:34px;line-height:1.05;margin:2px 0 0;text-wrap:balance}
+h1 em{font-weight:500}
+h2{font-size:15px;margin:0 0 12px;font-weight:700}
+h3{font-size:13px;margin:0 0 8px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.c-marcela{color:var(--marcela)} .c-rafaela{color:var(--rafaela)} .c-clinica{color:var(--clinica)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;min-width:0}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))} .g3{grid-template-columns:repeat(3,minmax(0,1fr))} .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g-side{grid-template-columns:minmax(0,1fr) minmax(0,1.6fr)}
+.kpi .l{font-size:12px;color:var(--muted)} .kpi .v{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px} .kpi .s{font-size:12px;color:var(--muted)}
+.btn{all:unset;box-sizing:border-box;cursor:pointer;padding:9px 14px;border-radius:8px;font-weight:600;background:var(--ink);color:var(--bg);font-size:13px;display:inline-flex;gap:6px;align-items:center}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:focus-visible{outline:2px solid var(--clinica);outline-offset:2px}
+.btn.marcela{background:var(--marcela);color:#fff} .btn.rafaela{background:var(--rafaela);color:#fff}
+:root[data-theme="dark"] .btn.marcela,:root[data-theme="dark"] .btn.rafaela{color:#141416}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.marcela,:root:not([data-theme="light"]) .btn.rafaela{color:#141416}}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.click{cursor:pointer} tr.click:hover td{background:var(--sunk)}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11.5px;font-weight:600;white-space:nowrap}
+.p-ok{background:var(--ok-soft);color:var(--ok)} .p-warn{background:var(--warn-soft);color:var(--warn)} .p-bad{background:var(--bad-soft);color:var(--bad)}
+.p-m{background:var(--marcela-soft);color:var(--marcela)} .p-r{background:var(--rafaela-soft);color:var(--rafaela)} .p-c{background:var(--clinica-soft);color:var(--clinica)} .p-n{background:var(--sunk);color:var(--muted)}
+.muted{color:var(--muted)} .small{font-size:12px}
+.list{display:flex;flex-direction:column}
+.li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.li:last-child{border-bottom:0}
+.time{font-variant-numeric:tabular-nums;font-weight:700;min-width:46px}
+.bar{height:8px;background:var(--sunk);border-radius:99px;overflow:hidden}
+.bar span{display:block;height:100%}
+.payrow{display:grid;grid-template-columns:120px 1fr 96px;gap:10px;align-items:center;padding:6px 0;font-size:13px}
+.tabs{display:inline-flex;background:var(--sunk);border-radius:9px;padding:3px;gap:2px;flex-wrap:wrap}
+.tabs button{all:unset;cursor:pointer;padding:6px 12px;border-radius:7px;font-weight:600;font-size:13px;color:var(--muted)}
+.tabs button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.tabs button:focus-visible{outline:2px solid var(--clinica)}
+/* agenda */
+.week{display:grid;grid-template-columns:52px repeat(6,minmax(110px,1fr));min-width:760px}
+.week .hd{font-size:12px;font-weight:700;padding:8px 6px;border-bottom:1px solid var(--line);text-align:center}
+.week .hd.today{color:var(--accent)}
+.week .hr{font-size:11px;color:var(--muted);text-align:right;padding-right:8px;height:52px;border-top:1px solid var(--line);transform:translateY(-7px);border-top-color:transparent}
+.week .col{position:relative;border-left:1px solid var(--line)}
+.week .slot{height:52px;border-top:1px solid var(--line)}
+.ev{position:absolute;left:4px;right:4px;border-radius:7px;padding:5px 7px;font-size:11.5px;line-height:1.3;overflow:hidden;cursor:pointer;border-left:3px solid var(--accent);background:var(--accent-soft)}
+.ev b{display:block;font-size:12px}
+.ev.cir{background:var(--accent);color:var(--surface);border-left-color:var(--ink)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+/* cirurgia */
+.surg{display:flex;flex-direction:column;gap:8px}
+.scard{all:unset;box-sizing:border-box;cursor:pointer;border:1px solid var(--line);border-radius:9px;padding:12px;display:block;background:var(--surface)}
+.scard:hover{border-color:var(--marcela)} .scard.on{border-color:var(--marcela);box-shadow:inset 3px 0 0 var(--marcela)}
+.scard:focus-visible{outline:2px solid var(--marcela)}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:6px 12px;font-size:13px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;font-weight:600}
+.check{display:flex;gap:9px;align-items:flex-start;padding:6px 0;font-size:13px}
+.check input{margin-top:3px;accent-color:var(--marcela)}
+.tl{position:relative;padding-left:20px}
+.tl::before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl .st{position:relative;padding:5px 0 10px}
+.tl .st::before{content:"";position:absolute;left:-19px;top:9px;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--line)}
+.tl .st.done::before{background:var(--marcela);border-color:var(--marcela)}
+.tl .st.next::before{border-color:var(--marcela)}
+.team{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:99px;padding:4px 12px 4px 4px;font-size:12.5px}
+.av{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;background:var(--sunk)}
+/* paciente */
+.search{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit}
+.search:focus{outline:2px solid var(--clinica);outline-offset:-1px}
+.alert{background:var(--bad-soft);color:var(--bad);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600}
+.note{background:var(--sunk);border-radius:8px;padding:10px 12px;font-size:12.5px;color:var(--muted)}
+/* modal */
+.ov{position:fixed;inset:0;background:rgba(20,20,24,.45);display:grid;place-items:center;padding:16px;z-index:50}
+.modal{background:var(--surface);border-radius:12px;width:min(520px,100%);max-height:90vh;overflow-y:auto;padding:22px;border:1px solid var(--line)}
+.f{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);font-weight:600}
+.f input,.f select{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.f input:focus,.f select:focus{outline:2px solid var(--clinica);outline-offset:-1px}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-weight:600;font-size:13px;z-index:60}
+
+.fichagrid{grid-template-columns:240px minmax(0,1fr)}
+.plist{padding:12px;align-self:start;position:sticky;top:16px}
+.prow{all:unset;box-sizing:border-box;display:flex;gap:10px;align-items:center;padding:8px;border-radius:8px;cursor:pointer;width:100%}
+.prow:hover{background:var(--sunk)} .prow.on{background:var(--clinica-soft)} .prow:focus-visible{outline:2px solid var(--clinica)}
+.prow b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.av.big{width:54px;height:54px;font-size:18px;font-family:var(--display);font-weight:600;background:var(--clinica-soft);color:var(--clinica)}
+.fname{font-family:var(--display);font-size:30px;font-weight:600;margin:0;line-height:1.1}
+.fstrip{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);align-items:center}
+.tagline{background:var(--sunk);padding:6px 10px;border-radius:8px;font-size:13px}
+.tagline .muted{font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-right:6px;font-weight:700}
+.fstrip .alert{padding:6px 10px}
+.pin{background:var(--warn-soft);color:var(--warn);padding:6px 6px 6px 10px;border-radius:8px;font-size:13px;font-weight:600;display:flex;gap:6px;align-items:center}
+.pin .x{all:unset;cursor:pointer;padding:0 5px;border-radius:4px;opacity:.7} .pin .x:hover{opacity:1} .pin .x:focus-visible{outline:2px solid var(--warn)}
+.addpin{all:unset;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);padding:6px 10px;border:1px dashed var(--line);border-radius:8px}
+.addpin:hover{color:var(--ink)} .addpin:focus-visible{outline:2px solid var(--clinica)}
+.ftabs{display:flex;gap:2px;border-bottom:1px solid var(--line);overflow-x:auto}
+.ftabs button{all:unset;cursor:pointer;padding:10px 14px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.ftabs button.on{color:var(--ink);border-bottom-color:var(--ink)} .ftabs button:focus-visible{outline:2px solid var(--clinica)}
+.cnt{background:var(--sunk);border-radius:99px;padding:0 7px;font-size:11px;margin-left:4px}
+.editor{border-top:3px solid var(--ac)}
+.f textarea{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;resize:vertical}
+.f textarea:focus{outline:2px solid var(--ac,var(--clinica));outline-offset:-1px}
+.evo{border-left:3px solid var(--ac);padding:12px 0 12px 14px;margin-top:12px}
+.evo+.evo{border-top:0}
+.evo-h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.evo-b{display:grid;grid-template-columns:120px 1fr;gap:6px 14px;margin:10px 0 0;font-size:13.5px}
+.evo-b dt{color:var(--muted);font-size:12px;font-weight:700;padding-top:1px} .evo-b dd{margin:0;max-width:68ch}
+.meds{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;font-size:13px;background:var(--sunk);padding:6px 10px;border-radius:8px;width:fit-content;max-width:100%}
+.evo-a{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.att{font-size:12px;border:1px solid var(--line);border-radius:6px;padding:3px 8px;background:var(--surface)}
+.att::before{content:"⎘ ";color:var(--muted)}
+.lnk{all:unset;cursor:pointer;color:var(--ink);text-decoration:underline;text-underline-offset:2px} .lnk:focus-visible{outline:2px solid var(--clinica)}
+.tl2{display:flex;flex-direction:column}
+.tli{display:flex;gap:12px;align-items:baseline;padding:9px 0 9px 12px;border-left:3px solid var(--ac);border-bottom:1px solid var(--line);font-size:13.5px}
+.tli.fut{border-left-style:dashed;background:var(--sunk)}
+.tld{font-weight:700;min-width:42px}
+.drop{display:flex;flex-direction:column;align-items:center;gap:4px;padding:22px;border:1.5px dashed var(--line);border-radius:10px;cursor:pointer;text-align:center;background:var(--bg)}
+.drop:hover,.drop.over{border-color:var(--clinica);background:var(--clinica-soft)}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:10px}
+.dcard{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:10px;padding:10px;border:1px solid var(--line);border-radius:9px;align-items:flex-start;min-width:0}
+.dcard:hover{border-color:var(--ink)} .dcard:focus-visible{outline:2px solid var(--clinica)}
+.thumb{width:48px;height:56px;border-radius:6px;display:grid;place-items:center;font-size:10px;font-weight:700;letter-spacing:.05em;flex:none;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.t-m{background:var(--marcela-soft);color:var(--marcela)} .t-r{background:var(--rafaela-soft);color:var(--rafaela)}
+.dmeta{display:flex;flex-direction:column;min-width:0} .dmeta b{font-size:13px;overflow-wrap:anywhere}
+.preview{margin-top:14px;min-height:260px;border-radius:8px;background:var(--sunk);display:grid;place-items:center;overflow:hidden}
+.preview img{max-height:70vh;width:auto}
+@media (max-width:1000px){.fichagrid{grid-template-columns:1fr}.plist{position:static}.plist .list{flex-direction:row;overflow-x:auto;gap:4px}.prow{width:auto;flex:none}}
+@media (max-width:520px){.evo-b{grid-template-columns:1fr}.evo-b dt{margin-top:4px}}
+.pbtn{all:unset;cursor:pointer;display:inline-block;padding:2px 9px;border-radius:99px;font-size:11.5px;font-weight:600}.pbtn:focus-visible{outline:2px solid var(--clinica)}
+.li.click{cursor:pointer;border-radius:6px}.li.click:hover{background:var(--sunk)}
+.mobnav{display:none}
+@media (max-width:1100px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr} aside{display:none}
+  .mobnav{display:block;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);padding-block:10px;padding-left:max(16px, env(safe-area-inset-left,0px));padding-right:max(16px, env(safe-area-inset-right,0px))}
+  .mobnav select{width:100%;font:inherit;font-weight:600;padding:9px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+  main{padding-left:max(16px, env(safe-area-inset-left,0px));padding-right:max(16px, env(safe-area-inset-right,0px))}
+  .g2,.g-side{grid-template-columns:1fr}
+}
+@media (max-width:520px){.g4,.g3{grid-template-columns:1fr 1fr}.kv{grid-template-columns:1fr}.kv dt{margin-top:6px}.payrow{grid-template-columns:90px 1fr 80px}h1{font-size:28px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="mobnav"><label for="mob" class="small muted">Ir para</label><select id="mob"></select></div>
+<div class="app">
+  <aside>
+    <div class="brand"><b>Clínica</b><span>Dra. Marcela Corrêa · Dra. Rafaela Tridapalli</span></div>
+    <nav id="nav"></nav>
+    <div class="demo"><b>Versão de demonstração.</b> Pacientes, valores e datas são exemplos. O que você cadastrar fica salvo neste navegador.<button id="reset" class="lnk" style="display:block;margin-top:6px">Restaurar dados de exemplo</button></div>
+  </aside>
+  <main id="view"></main>
+</div>
+<div id="layer"></div>
+
+<script>
+const TODAY = new Date(2026,9,16);
+const brl = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const dfmt = d => d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const D = (m,d)=>new Date(2026,m-1,d);
+
+const DOCS = {
+  marcela:{nome:'Dra. Marcela Corrêa',esp:'Cirurgia Plástica',cls:'marcela'},
+  rafaela:{nome:'Dra. Rafaela Tridapalli',esp:'Prevenção e Nutrologia',cls:'rafaela'}
+};
+
+/* ---------- dados de exemplo ---------- */
+const PAC = [
+ {id:1,nome:'Carolina Mendes',nasc:'14/03/1991',cpf:'***.482.***-10',tel:'(47) 99812-4410',email:'carol.mendes@email.com',cidade:'Blumenau/SC',origem:'Instagram (anúncio)',medicas:['marcela'],alergias:'Dipirona',meds:'Anticoncepcional oral',hist:'Sem cirurgias prévias. Não fumante.',obs:'Prefere contato por WhatsApp à tarde.',lgpd:true,
+  linha:[['12/08','marcela','Consulta de avaliação · Rinoplastia'],['02/09','marcela','Exames pré-operatórios entregues'],['22/10','marcela','Cirurgia agendada · Rinoplastia estruturada']]},
+ {id:2,nome:'Fernanda Kühl',nasc:'02/11/1984',cpf:'***.193.***-55',tel:'(47) 99133-2087',email:'fe.kuhl@email.com',cidade:'Gaspar/SC',origem:'Indicação de paciente',medicas:['marcela','rafaela'],alergias:'Nenhuma conhecida',meds:'Levotiroxina 50 mcg',hist:'Duas gestações. Hipotireoidismo controlado.',obs:'Acompanhamento nutrológico antes da abdominoplastia.',lgpd:true,
+  linha:[['10/06','rafaela','Consulta nutrologia · bioimpedância'],['08/07','rafaela','Retorno · ajuste do plano'],['19/08','marcela','Avaliação · Abdominoplastia + lipo'],['05/11','marcela','Cirurgia prevista']]},
+ {id:3,nome:'Juliana Prado',nasc:'27/07/1979',cpf:'***.774.***-31',tel:'(47) 98840-1192',email:'ju.prado@email.com',cidade:'Blumenau/SC',origem:'Google (pesquisa)',medicas:['marcela'],alergias:'Nenhuma conhecida',meds:'—',hist:'Toxina botulínica há 6 meses.',obs:'',lgpd:true,
+  linha:[['16/04','marcela','Toxina botulínica · terço superior'],['16/10','marcela','Retorno + Skinbooster']]},
+ {id:4,nome:'Roberto Schmitt',nasc:'09/01/1968',cpf:'***.305.***-02',tel:'(47) 99702-5531',email:'r.schmitt@email.com',cidade:'Indaial/SC',origem:'Google (perfil da empresa)',medicas:['rafaela'],alergias:'Penicilina',meds:'Losartana 50 mg',hist:'Hipertensão. Histórico familiar de diabetes.',obs:'Check-up preventivo anual.',lgpd:true,
+  linha:[['20/09','rafaela','Check-up preventivo · solicitação de exames'],['20/10','rafaela','Retorno com exames']]},
+ {id:5,nome:'Patrícia Hoffmann',nasc:'30/05/1988',cpf:'***.611.***-47',tel:'(47) 99251-7780',email:'pati.h@email.com',cidade:'Pomerode/SC',origem:'Instagram (orgânico)',medicas:['rafaela'],alergias:'Lactose (intolerância)',meds:'—',hist:'Busca recomposição corporal.',obs:'Plano trimestral, 2º mês.',lgpd:true,
+  linha:[['18/08','rafaela','Consulta · início plano trimestral'],['19/09','rafaela','Retorno mensal'],['21/10','rafaela','Retorno mensal + bioimpedância']]},
+ {id:6,nome:'Larissa Bauer',nasc:'11/12/1995',cpf:'***.958.***-66',tel:'(47) 99677-0304',email:'lari.bauer@email.com',cidade:'Blumenau/SC',origem:'Instagram (anúncio)',medicas:['marcela'],alergias:'Nenhuma conhecida',meds:'—',hist:'Sem cirurgias prévias.',obs:'',lgpd:false,
+  linha:[['01/10','marcela','Consulta · Mamoplastia de aumento'],['29/10','marcela','Cirurgia agendada']]},
+];
+
+const CIR = [
+ {id:'c1',pac:1,proc:'Rinoplastia estruturada',data:D(10,22),hora:'07:30',dur:'4h',local:'Hospital (centro cirúrgico)',localTipo:'Hospital',quarto:'Day clinic · alta no mesmo dia',anest:'Geral',
+  equipe:[['Dra. Marcela Corrêa','Cirurgiã'],['Dr. Eduardo Lenz','Anestesista'],['Dra. Bianca Rocha','Auxiliar'],['Simone','Instrumentadora']],
+  pre:[['Consulta de avaliação',true],['Exames laboratoriais',true],['Avaliação cardiológica / ECG',true],['Termo de consentimento assinado',true],['Fotos pré-operatórias',true],['Orientação de jejum (8h)',false],['Suspender anti-inflamatórios 7 dias antes',false]],
+  pos:[['D+1','Contato da equipe',''],['D+7','Retirada da tala e pontos',''],['D+30','Retorno + fotos',''],['D+90','Retorno',''],['D+365','Avaliação final + fotos','']],
+  fin:{honorario:18000,hospital:6200,anestesista:3500,auxiliar:2000,materiais:0},pago:'Sinal pago (30%)',status:'Confirmada'},
+ {id:'c2',pac:6,proc:'Mamoplastia de aumento',data:D(10,29),hora:'08:00',dur:'2h30',local:'Hospital (centro cirúrgico)',localTipo:'Hospital',quarto:'Internação 1 diária',anest:'Geral',
+  equipe:[['Dra. Marcela Corrêa','Cirurgiã'],['Dr. Eduardo Lenz','Anestesista'],['Dra. Bianca Rocha','Auxiliar']],
+  pre:[['Consulta de avaliação',true],['Exames laboratoriais',true],['Mamografia / ultrassom de mamas',false],['Escolha do implante (perfil e volume)',true],['Termo de consentimento assinado',false],['Fotos pré-operatórias',true]],
+  pos:[['D+1','Alta hospitalar',''],['D+7','Curativo',''],['D+15','Retirada de pontos',''],['D+30','Liberação de atividades leves',''],['D+180','Retorno + fotos','']],
+  fin:{honorario:15000,hospital:5800,anestesista:3000,auxiliar:1800,materiais:5400},pago:'Aguardando sinal',status:'Pendências'},
+ {id:'c3',pac:2,proc:'Abdominoplastia + lipoaspiração de flancos',data:D(11,5),hora:'07:00',dur:'5h',local:'Hospital (centro cirúrgico)',localTipo:'Hospital',quarto:'Internação 1 diária',anest:'Peridural + sedação',
+  equipe:[['Dra. Marcela Corrêa','Cirurgiã'],['Anestesista a definir','Anestesista'],['Dra. Bianca Rocha','Auxiliar']],
+  pre:[['Consulta de avaliação',true],['Liberação nutrológica (Dra. Rafaela)',true],['Exames laboratoriais',false],['Avaliação cardiológica / ECG',false],['Cinta modeladora comprada',false],['Termo de consentimento assinado',false]],
+  pos:[['D+1','Alta hospitalar',''],['D+3','Início da drenagem linfática',''],['D+10','Retirada de dreno',''],['D+21','Retirada de pontos',''],['D+90','Retorno + fotos','']],
+  fin:{honorario:22000,hospital:8500,anestesista:4000,auxiliar:2500,materiais:900},pago:'Parcelado 10x no cartão',status:'Pendências'},
+ {id:'c4',pac:3,proc:'Blefaroplastia superior',data:D(11,12),hora:'14:00',dur:'1h30',local:'Na clínica (sala de procedimentos)',localTipo:'Clínica',quarto:'Ambulatorial',anest:'Local',
+  equipe:[['Dra. Marcela Corrêa','Cirurgiã'],['Simone','Instrumentadora']],
+  pre:[['Consulta de avaliação',true],['Exames básicos',false],['Termo de consentimento assinado',false]],
+  pos:[['D+5','Retirada de pontos',''],['D+30','Retorno + fotos','']],
+  fin:{honorario:7500,hospital:0,anestesista:0,auxiliar:0,materiais:350},pago:'Pix à vista na data',status:'Agendada'},
+];
+
+/* agenda: dia (0=seg..5=sáb), início em horas, duração em horas */
+const AG = {
+ marcela:[
+  {d:0,h:9,du:1,t:'Avaliação · Rinoplastia',p:'Nova paciente (Instagram)',k:'con'},
+  {d:0,h:14,du:.75,t:'Toxina botulínica',p:'Ana C.',k:'proc'},
+  {d:1,h:7.5,du:4,t:'Cirurgia · Lipoaspiração',p:'Hospital',k:'cir'},
+  {d:1,h:15,du:1,t:'Retorno D+30',p:'Mariana S.',k:'ret'},
+  {d:2,h:9,du:1,t:'Consulta · Mamas',p:'Larissa Bauer',k:'con'},
+  {d:2,h:10.5,du:1,t:'Ultraformer III',p:'Beatriz L.',k:'proc'},
+  {d:2,h:14,du:1.5,t:'Sculptra',p:'Renata P.',k:'proc'},
+  {d:3,h:9,du:1,t:'Avaliação · Abdominoplastia',p:'Cláudia R.',k:'con'},
+  {d:3,h:13.5,du:2,t:'Otoplastia (na clínica)',p:'Lucas M.',k:'cir'},
+  {d:4,h:9,du:.75,t:'Retorno + Skinbooster',p:'Juliana Prado',k:'proc'},
+  {d:4,h:10,du:1,t:'Ácido hialurônico',p:'Tatiane K.',k:'proc'},
+  {d:4,h:14,du:1,t:'Pré-operatório',p:'Carolina Mendes',k:'ret'},
+  {d:4,h:15.5,du:1,t:'Retorno D+7',p:'Sabrina V.',k:'ret'},
+ ],
+ rafaela:[
+  {d:0,h:8,du:1,t:'Consulta nutrologia',p:'Nova paciente (Google)',k:'con'},
+  {d:0,h:10,du:.5,t:'Bioimpedância',p:'Patrícia H.',k:'proc'},
+  {d:0,h:13.5,du:1,t:'Check-up preventivo',p:'Marcos T.',k:'con'},
+  {d:1,h:8,du:1,t:'Retorno mensal',p:'Gabriela F.',k:'ret'},
+  {d:1,h:9.5,du:1,t:'Consulta nutrologia',p:'Henrique W.',k:'con'},
+  {d:1,h:14,du:1,t:'Soroterapia',p:'Daniela S.',k:'proc'},
+  {d:2,h:8,du:1,t:'Retorno com exames',p:'Roberto Schmitt',k:'ret'},
+  {d:2,h:10,du:1,t:'Consulta prevenção',p:'Simone A.',k:'con'},
+  {d:3,h:8,du:1,t:'Consulta nutrologia',p:'Bruna K.',k:'con'},
+  {d:3,h:13.5,du:1,t:'Retorno mensal',p:'Patrícia Hoffmann',k:'ret'},
+  {d:4,h:8,du:1,t:'Avaliação pré-cirúrgica',p:'Fernanda Kühl',k:'con'},
+  {d:4,h:10,du:.5,t:'Bioimpedância',p:'Igor P.',k:'proc'},
+  {d:5,h:8,du:1,t:'Consulta nutrologia',p:'Vanessa R.',k:'con'},
+ ]
+};
+
+const TAXAS = {pix:0,dinheiro:0,debito:1.49,credito:3.19,parc26:4.59,parc712:6.89};
+function taxa(forma,parc){if(forma==='parcelado')return parc<=6?TAXAS.parc26:TAXAS.parc712;return TAXAS[forma]||0}
+const FORMAS = {pix:'Pix',dinheiro:'Dinheiro',debito:'Débito',credito:'Crédito à vista',parcelado:'Crédito parcelado'};
+
+let REC = {
+ marcela:[
+  {data:'02/10',pac:'Juliana Prado',serv:'Toxina botulínica',forma:'pix',parc:1,valor:1800},
+  {data:'03/10',pac:'Carolina Mendes',serv:'Sinal cirurgia · Rinoplastia',forma:'pix',parc:1,valor:5400},
+  {data:'06/10',pac:'Renata P.',serv:'Sculptra (2 frascos)',forma:'parcelado',parc:4,valor:5200},
+  {data:'07/10',pac:'Beatriz L.',serv:'Ultraformer III · face',forma:'credito',parc:1,valor:3500},
+  {data:'08/10',pac:'Cláudia R.',serv:'Consulta de avaliação',forma:'debito',parc:1,valor:600},
+  {data:'09/10',pac:'Fernanda Kühl',serv:'Abdominoplastia (honorário)',forma:'parcelado',parc:10,valor:22000},
+  {data:'13/10',pac:'Lucas M.',serv:'Otoplastia (na clínica)',forma:'pix',parc:1,valor:8000},
+  {data:'14/10',pac:'Tatiane K.',serv:'Ácido hialurônico · lábios',forma:'dinheiro',parc:1,valor:1900},
+  {data:'15/10',pac:'Larissa Bauer',serv:'Consulta de avaliação',forma:'pix',parc:1,valor:600},
+ ],
+ rafaela:[
+  {data:'01/10',pac:'Patrícia Hoffmann',serv:'Plano trimestral · parcela 2/3',forma:'credito',parc:1,valor:1200},
+  {data:'02/10',pac:'Henrique W.',serv:'Consulta nutrologia',forma:'pix',parc:1,valor:650},
+  {data:'06/10',pac:'Gabriela F.',serv:'Plano semestral',forma:'parcelado',parc:6,valor:5400},
+  {data:'07/10',pac:'Daniela S.',serv:'Soroterapia (pacote 4 sessões)',forma:'parcelado',parc:3,valor:2400},
+  {data:'08/10',pac:'Marcos T.',serv:'Check-up preventivo',forma:'debito',parc:1,valor:750},
+  {data:'09/10',pac:'Igor P.',serv:'Bioimpedância avulsa',forma:'pix',parc:1,valor:180},
+  {data:'13/10',pac:'Simone A.',serv:'Consulta prevenção',forma:'dinheiro',parc:1,valor:650},
+  {data:'14/10',pac:'Bruna K.',serv:'Consulta nutrologia',forma:'pix',parc:1,valor:650},
+  {data:'15/10',pac:'Roberto Schmitt',serv:'Retorno com exames',forma:'pix',parc:1,valor:0},
+ ]
+};
+const CUSTOS = {
+ marcela:[['Repasse anestesista · Lipoaspiração 13/10','Repasse',3200,'pago'],['Repasse auxiliar · Lipoaspiração 13/10','Repasse',1800,'pago'],['Produtos · Sculptra, toxina, AH','Insumos',6900,'pago'],['Hospital · taxa de sala 13/10','Hospital',5600,'a vencer'],['Rateio da clínica (50%)','Clínica',12945,'a vencer']],
+ rafaela:[['Insumos soroterapia','Insumos',1150,'pago'],['Laboratório parceiro (convênio exames)','Serviços',480,'a vencer'],['Rateio da clínica (50%)','Clínica',12945,'a vencer']]
+};
+const SERVICOS = {
+ marcela:['Consulta de avaliação','Retorno','Toxina botulínica','Ácido hialurônico','Skinbooster','Sculptra','Radiesse','Ultraformer III','Cirurgia na clínica','Sinal de cirurgia','Honorário de cirurgia'],
+ rafaela:['Consulta nutrologia','Consulta prevenção','Check-up preventivo','Retorno','Bioimpedância','Soroterapia','Plano trimestral','Plano semestral']
+};
+
+const ACOMP = [
+ {pac:'Patrícia Hoffmann',plano:'Trimestral · recomposição corporal',inicio:'18/08',fase:2,total:3,prox:'21/10',exames:'Em dia',meta:'−4% gordura corporal',evol:'−2,1%'},
+ {pac:'Gabriela F.',plano:'Semestral · emagrecimento',inicio:'06/10',fase:1,total:6,prox:'03/11',exames:'Aguardando resultados',meta:'−8 kg',evol:'—'},
+ {pac:'Fernanda Kühl',plano:'Preparo pré-cirúrgico',inicio:'10/06',fase:5,total:5,prox:'23/10',exames:'Em dia',meta:'Liberação para cirurgia',evol:'Liberada'},
+ {pac:'Roberto Schmitt',plano:'Check-up preventivo anual',inicio:'20/09',fase:2,total:2,prox:'20/09/2027',exames:'Entregues',meta:'Rastreamento cardiometabólico',evol:'Concluído'},
+ {pac:'Daniela S.',plano:'Soroterapia · 4 sessões',inicio:'07/10',fase:2,total:4,prox:'21/10',exames:'Em dia',meta:'Reposição de vitamina D e B12',evol:'2 de 4'},
+];
+
+const FOLHA = [
+ ['Aline Souza','Secretária / recepção','CLT',2800,'05/11'],
+ ['Jéssica Lima','Técnica de enfermagem','CLT',3400,'05/11'],
+ ['Simone Reis','Instrumentadora','Por cirurgia (PJ)',1200,'por evento'],
+ ['Clara Voigt','Social media','PJ',1800,'10/11'],
+];
+const DESP = [
+ ['Aluguel sala 817 · Stein Office','Fixa',6200,'05/10','pago'],
+ ['Condomínio','Fixa',1350,'10/10','pago'],
+ ['Energia (Celesc)','Fixa',640,'15/10','pago'],
+ ['Internet + telefone','Fixa',290,'18/10','a vencer'],
+ ['Encargos da folha (FGTS/INSS)','Folha',1980,'20/10','a vencer'],
+ ['Contabilidade','Fixa',950,'20/10','a vencer'],
+ ['Material de limpeza e copa','Variável',380,'—','pago'],
+ ['Tráfego pago · M2L Digital','Marketing',2500,'25/10','a vencer'],
+ ['Descarte de resíduos de saúde','Fixa',260,'28/10','a vencer'],
+ ['Manutenção ar-condicionado','Variável',450,'30/10','a vencer'],
+];
+
+/* ---------- navegação ---------- */
+const ROUTES = [
+ {g:'Clínica',c:'clinica',items:[['painel','Painel do dia'],['pacientes','Pacientes'],['fin-clinica','Financeiro da clínica']]},
+ {g:'Dra. Marcela Corrêa',c:'marcela',items:[['ag-marcela','Agenda'],['cirurgias','Cirurgias'],['fin-marcela','Financeiro']]},
+ {g:'Dra. Rafaela Tridapalli',c:'rafaela',items:[['ag-rafaela','Agenda'],['acomp','Acompanhamentos'],['fin-rafaela','Financeiro']]},
+];
+let route='painel', selPac=1, selCir='c1', finTab={marcela:'lanc',rafaela:'lanc'};
+function navHTML(){return ROUTES.map(g=>`<div class="grp"><i style="background:var(--${g.c})"></i>${g.g}</div>`+g.items.map(([k,l])=>`<button data-r="${k}" data-c="${g.c}" class="${route===k?'on':''}">${l}</button>`).join('')).join('')}
+function go(r){route=r;render();window.scrollTo(0,0)}
+document.getElementById('nav').addEventListener('click',e=>{const b=e.target.closest('button[data-r]');if(b)go(b.dataset.r)});
+const mob=document.getElementById('mob');
+mob.innerHTML=ROUTES.map(g=>`<optgroup label="${g.g}">`+g.items.map(([k,l])=>`<option value="${k}">${l}</option>`).join('')+'</optgroup>').join('');
+mob.onchange=()=>go(mob.value);
+
+function head(eyebrow,cls,title,actions=''){return `<div class="head"><div><div class="eyebrow c-${cls}">${eyebrow}</div><h1>${title}</h1></div><div style="display:flex;gap:8px;flex-wrap:wrap">${actions}</div></div>`}
+function pacBy(id){return PAC.find(p=>p.id===id)}
+
+/* ---------- pacientes / ficha ---------- */
+const EVOL = {
+ 2:[
+  {id:'e4',data:'19/08/2026',hora:'09:10',med:'marcela',tipo:'Consulta de avaliação',campos:[['Motivo','Deseja abdominoplastia após duas gestações. Incômodo com flacidez e diástase.'],['Exame físico','Diástase de retos ~3 cm acima do umbigo. Excesso de pele infraumbilical. Gordura localizada em flancos.'],['Conduta','Indicada abdominoplastia com plicatura + lipo de flancos. Solicitados exames pré-operatórios e liberação nutrológica com a Dra. Rafaela. Orçamento entregue.']],anexos:['Fotos pré-operatórias (6)','Orçamento cirurgia.pdf']},
+  {id:'e3',data:'16/09/2026',hora:'08:00',med:'rafaela',tipo:'Avaliação pré-cirúrgica',campos:[['Motivo','Liberação nutrológica para abdominoplastia.'],['Avaliação','Peso 66,4 kg (−5,6 kg desde junho). Gordura corporal 26,8%. Exames dentro da normalidade, ferritina 48.'],['Conduta','Liberada do ponto de vista nutrológico. Manter suplementação proteica no pós-operatório. Retorno 30 dias após a cirurgia.']],medidas:{peso:'66,4 kg',gordura:'26,8%',imc:'23,5'},anexos:['Liberação nutrológica.pdf']},
+  {id:'e2',data:'08/07/2026',hora:'08:00',med:'rafaela',tipo:'Retorno',campos:[['Evolução','Boa adesão ao plano. Relata mais disposição.'],['Avaliação','Peso 69,1 kg. Gordura corporal 29,2%.'],['Conduta','Ajuste do plano alimentar. Manter atividade física 4x/semana.']],medidas:{peso:'69,1 kg',gordura:'29,2%',imc:'24,5'},anexos:[]},
+  {id:'e1',data:'10/06/2026',hora:'08:00',med:'rafaela',tipo:'Primeira consulta',campos:[['Motivo','Quer perder peso antes da cirurgia plástica.'],['Avaliação','Peso 72,0 kg. Gordura corporal 31,5%. Hipotireoidismo em tratamento.'],['Conduta','Plano alimentar individualizado. Solicitados exames laboratoriais. Bioimpedância mensal.']],medidas:{peso:'72,0 kg',gordura:'31,5%',imc:'25,5'},anexos:['Pedido de exames.pdf','Bioimpedância 10-06.pdf']},
+ ],
+ 1:[
+  {id:'e2',data:'02/09/2026',hora:'14:00',med:'marcela',tipo:'Retorno pré-operatório',campos:[['Evolução','Trouxe exames pré-operatórios.'],['Avaliação','Exames sem alterações. ECG normal.'],['Conduta','Cirurgia confirmada para 22/10. Orientada sobre jejum e suspensão de anti-inflamatórios.']],anexos:['Exames pré-operatórios.pdf']},
+  {id:'e1',data:'12/08/2026',hora:'09:00',med:'marcela',tipo:'Consulta de avaliação',campos:[['Motivo','Incômodo com giba nasal e ponta caída.'],['Exame físico','Giba osteocartilaginosa, ponta com pouca projeção. Respiração nasal preservada.'],['Conduta','Indicada rinoplastia estruturada. Simulação de resultado apresentada.']],anexos:['Fotos pré-operatórias (8)']},
+ ]
+};
+function evolDe(p){
+ if(!EVOL[p.id])EVOL[p.id]=p.linha.filter(l=>!/agendada|prevista/i.test(l[2])).slice().reverse().map((l,i)=>({id:'g'+i,data:l[0]+'/2026',hora:'09:00',med:l[1],tipo:l[2].split('·')[0].trim(),campos:[['Registro',l[2]+'.']],anexos:[]}));
+ return EVOL[p.id];
+}
+const DOCSPAC = {
+ 2:[
+  {n:'Fotos pré-operatórias',tipo:'Foto',data:'19/08',med:'marcela',info:'6 imagens'},
+  {n:'Orçamento cirurgia.pdf',tipo:'Orçamento',data:'19/08',med:'marcela',info:'PDF · 180 KB'},
+  {n:'Termo de consentimento · Abdominoplastia',tipo:'Termo',data:'—',med:'marcela',info:'Aguardando assinatura',pend:true},
+  {n:'Liberação nutrológica.pdf',tipo:'Laudo',data:'16/09',med:'rafaela',info:'PDF · 95 KB'},
+  {n:'Hemograma e bioquímica.pdf',tipo:'Exame',data:'02/09',med:'rafaela',info:'PDF · 1,2 MB'},
+  {n:'Bioimpedância 16-09.pdf',tipo:'Exame',data:'16/09',med:'rafaela',info:'PDF · 310 KB'},
+  {n:'Plano alimentar.pdf',tipo:'Receita',data:'08/07',med:'rafaela',info:'PDF · 220 KB'},
+  {n:'Termo LGPD e uso de imagem',tipo:'Termo',data:'10/06',med:'rafaela',info:'Assinado'},
+ ],
+ 1:[
+  {n:'Fotos pré-operatórias',tipo:'Foto',data:'12/08',med:'marcela',info:'8 imagens'},
+  {n:'Exames pré-operatórios.pdf',tipo:'Exame',data:'02/09',med:'marcela',info:'PDF · 2,4 MB'},
+  {n:'Termo de consentimento · Rinoplastia',tipo:'Termo',data:'02/09',med:'marcela',info:'Assinado'},
+  {n:'Termo LGPD e uso de imagem',tipo:'Termo',data:'12/08',med:'marcela',info:'Assinado'},
+ ]
+};
+const PINS = {2:['Ansiosa com anestesia: explicar o procedimento com calma','Prefere retornos pela manhã'],1:['Prefere contato por WhatsApp à tarde']};
+const PROX = {1:'22/10 · Cirurgia · Rinoplastia estruturada',2:'23/10 · Dra. Rafaela · Retorno pré-cirúrgico',3:'16/10 · Retorno + Skinbooster',4:'20/10 · Retorno com exames',5:'21/10 · Retorno mensal',6:'29/10 · Cirurgia · Mamoplastia de aumento'};
+let pacQ='', pacTab='evol', autor='marcela', docFiltro='Todos', evolFiltro='todas';
+selPac=2;
+const idade=n=>{const [d,m,a]=n.split('/').map(Number);let i=2026-a;if(10<m||(10===m&&16<d))i--;return i};
+const medTag=m=>`<span class="pill p-${m[0]}">${m==='marcela'?'Dra. Marcela':'Dra. Rafaela'}</span>`;
+const docIco={Foto:'IMG',Exame:'EXA',Termo:'TER',Laudo:'LAU',Receita:'REC',Orçamento:'ORC',Atestado:'ATE',Outro:'ARQ'};
+
+function vPacientes(){
+ const lista=PAC.filter(p=>p.nome.toLowerCase().includes(pacQ.toLowerCase()));
+ const p=pacBy(selPac);
+ const ev=evolDe(p), docs=(DOCSPAC[p.id]=DOCSPAC[p.id]||[]), pins=(PINS[p.id]=PINS[p.id]||[]);
+ const tabs=[['evol','Evolução clínica',ev.length],['hist','Linha do tempo'],['docs','Documentos',docs.length],['dados','Dados e saúde'],['fin','Financeiro']];
+ let body='';
+ if(pacTab==='evol') body=tabEvol(p,ev);
+ if(pacTab==='hist') body=tabHist(p,ev,docs);
+ if(pacTab==='docs') body=tabDocs(p,docs);
+ if(pacTab==='dados') body=tabDados(p);
+ if(pacTab==='fin') body=tabFin(p);
+ return head('Clínica · ficha do paciente','clinica','Pacientes','<button class="btn" data-act="novo-pac">+ Novo paciente</button>')+
+ `<div class="grid fichagrid">
+  <div class="panel plist"><input id="q" class="search" placeholder="Buscar por nome" value="${esc(pacQ)}" aria-label="Buscar paciente">
+   <div class="list" style="margin-top:8px">${lista.map(x=>`<button class="prow ${x.id===selPac?'on':''}" data-p="${x.id}"><span class="av">${x.nome.split(' ').map(w=>w[0]).slice(0,2).join('')}</span><span style="min-width:0;flex:1"><b>${x.nome}</b><span class="small muted" style="display:block">${x.medicas.map(m=>m==='marcela'?'Marcela':'Rafaela').join(' · ')}</span></span></button>`).join('')}</div></div>
+  <div class="grid" style="align-content:start;min-width:0">
+   <div class="panel fhead">
+    <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+     <span class="av big">${p.nome.split(' ').map(w=>w[0]).slice(0,2).join('')}</span>
+     <div style="flex:1;min-width:200px"><h2 class="fname">${p.nome}</h2>
+      <div class="small muted">${idade(p.nasc)} anos · ${p.cidade} · ${p.tel} · desde ${p.linha[0][0]}/2026</div>
+      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">${p.medicas.map(medTag).join('')}${p.lgpd?'<span class="pill p-ok">LGPD assinado</span>':'<span class="pill p-warn">LGPD pendente</span>'}</div></div>
+     <div class="small" style="text-align:right"><span class="muted">Próximo agendamento</span><br><b>${PROX[p.id]||'—'}</b></div>
+    </div>
+    <div class="fstrip">
+     ${p.alergias!=='Nenhuma conhecida'?`<div class="alert">Alergia: ${p.alergias}</div>`:'<div class="tagline"><span class="muted">Alergias</span> Nenhuma conhecida</div>'}
+     <div class="tagline"><span class="muted">Medicações</span> ${p.meds}</div>
+     ${pins.map((t,i)=>`<div class="pin">${esc(t)}<button class="x" data-unpin="${i}" aria-label="Remover nota">×</button></div>`).join('')}
+     <button class="addpin" data-addpin>+ Nota fixa</button>
+    </div>
+   </div>
+   <div class="ftabs" role="tablist">${tabs.map(([k,l,n])=>`<button role="tab" data-ptab="${k}" class="${pacTab===k?'on':''}">${l}${n!==undefined?` <span class="cnt">${n}</span>`:''}</button>`).join('')}</div>
+   ${body}
+  </div></div>`;
+}
+
+function tabEvol(p,ev){
+ const lista=ev.filter(e=>evolFiltro==='todas'||e.med===evolFiltro);
+ const sugest=autor==='marcela'?['Consulta de avaliação','Retorno','Procedimento','Retorno pós-operatório','Pré-operatório']:['Primeira consulta','Retorno','Check-up preventivo','Avaliação pré-cirúrgica','Soroterapia'];
+ return `<div class="panel editor" style="--ac:var(--${autor});--acs:var(--${autor}-soft)">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+   <h2 style="margin:0">Nova evolução</h2>
+   <div class="tabs" aria-label="Registrando como"><button data-autor="marcela" class="${autor==='marcela'?'on':''}">Dra. Marcela</button><button data-autor="rafaela" class="${autor==='rafaela'?'on':''}">Dra. Rafaela</button></div>
+  </div>
+  <form id="fe" class="grid" style="gap:10px">
+   <div class="grid g2" style="gap:10px"><label class="f">Tipo de atendimento<select id="e-tipo">${sugest.map(s=>`<option>${s}</option>`).join('')}</select></label>
+    <label class="f">Data<input id="e-data" value="16/10/2026"></label></div>
+   <label class="f">Motivo / queixa<textarea id="e-1" rows="2" placeholder="O que trouxe a paciente hoje"></textarea></label>
+   <label class="f">${autor==='marcela'?'Exame físico / achados':'Avaliação'}<textarea id="e-2" rows="2" placeholder="${autor==='marcela'?'Achados do exame':'Exames, composição corporal, observações'}"></textarea></label>
+   ${autor==='rafaela'?`<div class="grid g3" style="gap:10px"><label class="f">Peso (kg)<input id="e-peso" inputmode="decimal" placeholder="65,0"></label><label class="f">Gordura corporal (%)<input id="e-gord" inputmode="decimal" placeholder="25,0"></label><label class="f">IMC<input id="e-imc" inputmode="decimal" placeholder="23,1"></label></div>`:''}
+   <label class="f">Conduta / prescrição<textarea id="e-3" rows="2" placeholder="Orientações, pedidos, prescrição, próximo passo"></textarea></label>
+   <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+    <label class="btn ghost" for="e-file" style="cursor:pointer">Anexar arquivo<span id="e-fn" class="muted small"></span></label><input id="e-file" type="file" multiple hidden>
+    <button class="btn ${autor}" type="submit">Salvar evolução</button>
+   </div>
+  </form></div>
+  <div class="panel">
+   <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px"><h2 style="margin:0">Consultas anteriores</h2>
+    <div class="tabs"><button data-ef="todas" class="${evolFiltro==='todas'?'on':''}">Todas</button><button data-ef="marcela" class="${evolFiltro==='marcela'?'on':''}">Dra. Marcela</button><button data-ef="rafaela" class="${evolFiltro==='rafaela'?'on':''}">Dra. Rafaela</button></div></div>
+   ${lista.length?lista.map(e=>`<article class="evo" style="--ac:var(--${e.med})">
+    <div class="evo-h"><div><b>${e.tipo}</b> <span class="muted small num">· ${e.data} às ${e.hora}</span></div>${medTag(e.med)}</div>
+    ${e.medidas?`<div class="meds">${Object.entries({Peso:e.medidas.peso,'Gordura':e.medidas.gordura,IMC:e.medidas.imc}).filter(x=>x[1]).map(([k,v])=>`<span><span class="muted">${k}</span> <b class="num">${v}</b></span>`).join('')}</div>`:''}
+    <dl class="evo-b">${e.campos.map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+    ${e.anexos.length?`<div class="evo-a">${e.anexos.map(a=>`<span class="att">${esc(a)}</span>`).join('')}</div>`:''}
+    <div class="small muted" style="margin-top:8px">Registrado por ${e.med==='marcela'?'Dra. Marcela Corrêa':'Dra. Rafaela Tridapalli'}${e.novo?' · agora':''} · <button class="lnk" data-comp="${e.id}">Adicionar complemento</button></div>
+   </article>`).join(''):'<p class="muted">Nenhuma consulta registrada com esta médica.</p>'}
+  </div>`;
+}
+
+function tabHist(p,ev,docs){
+ const itens=[];
+ ev.forEach(e=>itens.push({d:e.data.slice(0,5),k:'Consulta',t:e.tipo,m:e.med}));
+ p.linha.filter(l=>/agendada|prevista/i.test(l[2])).forEach(l=>itens.push({d:l[0],k:'Agendado',t:l[2],m:l[1],fut:true}));
+ docs.filter(d=>d.data!=='—').forEach(d=>itens.push({d:d.data,k:'Documento',t:d.n,m:d.med}));
+ [...REC.marcela.map(r=>({...r,m:'marcela'})),...REC.rafaela.map(r=>({...r,m:'rafaela'}))].filter(r=>r.pac===p.nome).forEach(r=>itens.push({d:r.data,k:'Pagamento',t:`${r.serv} · ${brl(r.valor)} (${FORMAS[r.forma]}${r.forma==='parcelado'?' '+r.parc+'x':''})`,m:r.m}));
+ const key=s=>{const [d,m]=s.split('/').map(Number);return m*100+d};
+ itens.sort((a,b)=>key(b.d)-key(a.d));
+ const kc={Consulta:'p-n',Agendado:'p-c',Documento:'p-n',Pagamento:'p-ok'};
+ return `<div class="panel"><h2>Tudo o que aconteceu com ${p.nome.split(' ')[0]}</h2>
+  <div class="tl2">${itens.map(i=>`<div class="tli ${i.fut?'fut':''}" style="--ac:var(--${i.m})"><span class="num tld">${i.d}</span><div style="flex:1;min-width:0"><span class="pill ${kc[i.k]}">${i.k}</span> ${esc(i.t)}</div><span class="small muted">${i.m==='marcela'?'Marcela':'Rafaela'}</span></div>`).join('')}</div></div>`;
+}
+
+function tabDocs(p,docs){
+ const tipos=['Todos',...new Set(docs.map(d=>d.tipo))];
+ const lista=docs.filter(d=>docFiltro==='Todos'||d.tipo===docFiltro);
+ return `<div class="panel">
+  <label class="drop" for="d-file"><b>Arraste arquivos aqui ou clique para anexar</b><span class="small muted">Exames, termos assinados, fotos de antes e depois, receitas, laudos</span></label>
+  <input id="d-file" type="file" multiple hidden>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:14px 0 4px"><div class="tabs">${tipos.map(t=>`<button data-df="${t}" class="${docFiltro===t?'on':''}">${t}</button>`).join('')}</div>
+   <label class="f" style="flex-direction:row;align-items:center;gap:6px;margin-left:auto">Tipo do próximo anexo<select id="d-tipo">${Object.keys(docIco).map(t=>`<option>${t}</option>`).join('')}</select></label></div>
+  <div class="dgrid">${lista.map(d=>{const i=docs.indexOf(d);return `<button class="dcard" data-doc="${i}">
+   <span class="thumb t-${d.med[0]}">${d.src?`<img src="${d.src}" alt="">`:`<span>${docIco[d.tipo]||'ARQ'}</span>`}</span>
+   <span class="dmeta"><b>${esc(d.n)}</b><span class="small muted">${d.tipo} · ${d.data} · ${d.med==='marcela'?'Dra. Marcela':'Dra. Rafaela'}</span>${d.pend?`<span class="pill p-warn" style="margin-top:4px">${d.info}</span>`:`<span class="small muted">${d.info}</span>`}</span></button>`}).join('')}</div>
+ </div>`;
+}
+
+function tabDados(p){
+ return `<div class="grid g2">
+  <div class="panel"><h2>Dados cadastrais</h2><dl class="kv"><dt>Nome</dt><dd>${p.nome}</dd><dt>Nascimento</dt><dd>${p.nasc} (${idade(p.nasc)} anos)</dd><dt>CPF</dt><dd class="num">${p.cpf}</dd><dt>WhatsApp</dt><dd>${p.tel}</dd><dt>E-mail</dt><dd style="word-break:break-all">${p.email}</dd><dt>Cidade</dt><dd>${p.cidade}</dd><dt>Como conheceu</dt><dd>${p.origem}</dd><dt>Contato de emergência</dt><dd class="muted">Não informado</dd></dl></div>
+  <div class="panel"><h2>Saúde</h2><dl class="kv"><dt>Alergias</dt><dd>${p.alergias}</dd><dt>Medicações em uso</dt><dd>${p.meds}</dd><dt>Histórico</dt><dd>${p.hist}</dd><dt>Cirurgias prévias</dt><dd>${/Sem cirurgias/.test(p.hist)?'Nenhuma':'Ver histórico'}</dd><dt>Tabagismo</dt><dd>Não</dd><dt>Observações</dt><dd>${p.obs||'—'}</dd></dl><button class="btn ghost" style="margin-top:12px" data-act="edit-pac">Editar dados</button></div>
+ </div>`;
+}
+function tabFin(p){
+ const recs=[...REC.marcela.map(r=>({...r,m:'marcela'})),...REC.rafaela.map(r=>({...r,m:'rafaela'}))].filter(r=>r.pac===p.nome);
+ return `<div class="panel"><h2>Pagamentos</h2>${recs.length?`<div class="tablewrap"><table><thead><tr><th>Data</th><th>Serviço</th><th>Médica</th><th>Forma</th><th class="r">Valor</th></tr></thead><tbody>${recs.map(r=>`<tr><td class="num">${r.data}</td><td>${r.serv}</td><td>${medTag(r.m)}</td><td>${FORMAS[r.forma]}${r.forma==='parcelado'?' '+r.parc+'x':''}</td><td class="r">${brl(r.valor)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="muted">Nenhum pagamento registrado.</p>'}
+  <div class="note" style="margin-top:12px">Cada médica vê aqui só os pagamentos feitos a ela, se preferirem manter o financeiro separado também na ficha.</div></div>`;
+}
+
+function abrirDoc(i){
+ const d=DOCSPAC[selPac][i];
+ document.getElementById('layer').innerHTML=`<div class="ov" data-close><div class="modal" role="dialog" aria-modal="true" style="width:min(640px,100%)">
+  <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div><div class="eyebrow c-${d.med}">${d.tipo}</div><h2 style="font-family:var(--display);font-size:22px;font-weight:600;margin:2px 0 4px">${esc(d.n)}</h2><div class="small muted">Anexado em ${d.data} por ${d.med==='marcela'?'Dra. Marcela Corrêa':'Dra. Rafaela Tridapalli'} · ${d.info}</div></div><button class="btn ghost" data-close>Fechar</button></div>
+  <div class="preview">${d.src?`<img src="${d.src}" alt="${esc(d.n)}">`:`<div class="muted">Pré-visualização do arquivo aparece aqui no sistema real</div>`}</div>
+ </div></div>`;
+}
+function lerArquivos(files,cb){
+ const arr=[...files];let n=arr.length;const out=[];
+ if(!n)return;
+ arr.forEach(f=>{const item={n:f.name,info:(f.size/1024>1024?(f.size/1048576).toFixed(1).replace('.',',')+' MB':Math.max(1,Math.round(f.size/1024))+' KB')};
+  if(f.type.startsWith('image/')){const r=new FileReader();r.onload=()=>{item.src=r.result;out.push(item);if(!--n)cb(out)};r.onerror=()=>{out.push(item);if(!--n)cb(out)};r.readAsDataURL(f)}
+  else{out.push(item);if(!--n)cb(out)}});
+}
+
+/* ---------- painel ---------- */
+const hhmm=h=>`${String(Math.floor(h)).padStart(2,'0')}:${String(Math.round(h%1*60)).padStart(2,'0')}`;
+const kTag={con:'Consulta',proc:'Procedimento',ret:'Retorno',cir:'Cirurgia'};
+const ddmm=s=>{const [d,m]=s.split('/').map(Number);return new Date(2026,m-1,d)};
+function statusPill(s){return `<span class="pill ${s==='Confirmada'?'p-ok':s==='Pendências'?'p-warn':'p-n'}">${s}</span>`}
+function vPainel(){
+ const hoje=d=>AG[d].map((e,i)=>({...e,i})).filter(e=>e.d===4).sort((a,b)=>a.h-b.h);
+ const col=d=>`<div class="panel"><h2 class="c-${d}">${DOCS[d].nome}</h2><div class="list">${hoje(d).map(e=>`<div class="li click" data-ev="${d}:${e.i}"><span class="time">${hhmm(e.h)}</span><div style="flex:1;min-width:0"><b>${esc(e.p)}</b><div class="small muted">${esc(e.t)}</div></div><span class="pill ${e.k==='cir'?'p-'+d[0]:'p-n'}">${kTag[e.k]}</span></div>`).join('')||'<p class="muted">Nenhum horário hoje.</p>'}</div></div>`;
+ const recM=REC.marcela.reduce((s,r)=>s+r.valor,0), recR=REC.rafaela.reduce((s,r)=>s+r.valor,0);
+ const despAberto=DESP.filter(d=>d[4]!=='pago').reduce((s,d)=>s+d[2],0);
+ const fut=CIR.filter(c=>c.data>=TODAY).sort((a,b)=>a.data-b.data);
+ const prox=fut.slice(0,4), p1=fut[0];
+ const avisos=[];
+ fut.filter(c=>(c.data-TODAY)/864e5<=21).forEach(c=>{const f=c.pre.filter(x=>!x[1]).map(x=>x[0]);if(f.length)avisos.push(['p-bad','Pré-op',`${c.proc} de ${pacBy(c.pac).nome} (${dfmt(c.data)}): falta ${f.join(', ').toLowerCase()}.`,`data-gocir="${c.id}"`])});
+ PAC.filter(p=>!p.lgpd).forEach(p=>avisos.push(['p-warn','LGPD',`${p.nome} ainda não assinou o consentimento de uso de dados e imagens.`,`data-openpac="${p.id}"`]));
+ const av=DESP.filter(d=>d[4]!=='pago');if(av.length)avisos.push(['p-warn','A pagar',`${av.length} contas da clínica em aberto, somando ${brl(av.reduce((s,d)=>s+d[2],0))}.`,`data-go="fin-clinica"`]);
+ const ret=ACOMP.filter(a=>{try{const d=ddmm(a.prox);return d>TODAY&&(d-TODAY)/864e5<=7}catch(e){return false}});if(ret.length)avisos.push(['p-c','Retornos',`${ret.length} pacientes da Dra. Rafaela com retorno nos próximos 7 dias.`,`data-go="acomp"`]);
+ return head('Sexta, 16 de outubro','clinica','Painel do <em>dia</em>')+
+ `<div class="grid g4" style="margin-bottom:16px">
+  <div class="panel kpi"><div class="l">Atendimentos hoje</div><div class="v">${hoje('marcela').length+hoje('rafaela').length}</div><div class="s">${hoje('marcela').length} Dra. Marcela · ${hoje('rafaela').length} Dra. Rafaela</div></div>
+  <div class="panel kpi"><div class="l">Próxima cirurgia</div><div class="v">${p1?dfmt(p1.data):'—'}</div><div class="s">${p1?esc(p1.proc)+' · '+esc(pacBy(p1.pac).nome):'nenhuma agendada'}</div></div>
+  <div class="panel kpi"><div class="l">Faturado em outubro</div><div class="v">${brl(recM+recR)}</div><div class="s">soma das duas médicas</div></div>
+  <div class="panel kpi"><div class="l">Contas da clínica a pagar</div><div class="v">${brl(despAberto)}</div><div class="s">até o fim do mês</div></div>
+ </div>
+ <div class="grid g2" style="margin-bottom:16px">${col('marcela')}${col('rafaela')}</div>
+ <div class="grid g2">
+  <div class="panel"><h2>Próximas cirurgias</h2><div class="list">${prox.map(c=>`<div class="li click" data-gocir="${c.id}"><span class="time">${dfmt(c.data)}</span><div style="flex:1;min-width:0"><b>${esc(c.proc)}</b><div class="small muted">${esc(pacBy(c.pac).nome)} · ${c.localTipo==='Clínica'?'na clínica':'hospital'} · ${c.hora}</div></div>${statusPill(c.status)}</div>`).join('')||'<p class="muted">Nenhuma cirurgia agendada.</p>'}</div></div>
+  <div class="panel"><h2>Avisos</h2><div class="list">${avisos.map(a=>`<div class="li click" ${a[3]}><span class="pill ${a[0]}">${a[1]}</span><div>${esc(a[2])}</div></div>`).join('')||'<p class="muted">Tudo em dia.</p>'}</div></div>
+ </div>`;
+}
+
+/* ---------- agenda ---------- */
+let agView='semana', agDia=4;
+const DIAS=['Seg 12','Ter 13','Qua 14','Qui 15','Sex 16','Sáb 17'];
+function vAgenda(doc){
+ const H0=7,H1=19,PX=52, hrs=[];for(let h=H0;h<H1;h++)hrs.push(h);
+ const evs=AG[doc].map((e,i)=>({...e,i}));
+ let html;
+ if(agView==='semana'){
+  html=`<div class="tablewrap"><div class="week" style="--accent:var(--${doc});--accent-soft:var(--${doc}-soft)"><div></div>${DIAS.map((d,i)=>`<div class="hd ${i===4?'today':''}">${d}${i===4?' · hoje':''}</div>`).join('')}<div>${hrs.map(h=>`<div class="hr">${h}h</div>`).join('')}</div>`;
+  for(let d=0;d<6;d++) html+=`<div class="col">${hrs.map(()=>'<div class="slot"></div>').join('')}${evs.filter(e=>e.d===d).map(e=>`<div class="ev ${e.k==='cir'?'cir':''}" data-ev="${doc}:${e.i}" style="top:${(e.h-H0)*PX+2}px;height:${e.du*PX-4}px" title="${esc(e.t+' · '+e.p)}"><b>${esc(e.p)}</b>${esc(e.t)}</div>`).join('')}</div>`;
+  html+='</div></div>';
+ } else {
+  const dia=evs.filter(e=>e.d===agDia).sort((a,b)=>a.h-b.h);
+  const livres=[];for(let h=8;h<18;h++){if(h===12)continue;if(!dia.some(e=>h<e.h+e.du&&h+1>e.h))livres.push(h)}
+  html=`<div class="tabs" style="margin-bottom:14px">${DIAS.map((d,i)=>`<button data-agdia="${i}" class="${agDia===i?'on':''}">${d}</button>`).join('')}</div>
+   <div class="grid g-side" style="grid-template-columns:minmax(0,2fr) minmax(0,1fr)"><div class="list">${dia.map(e=>`<div class="li click" data-ev="${doc}:${e.i}" style="border-left:3px solid var(--${doc});padding-left:12px"><span class="time">${hhmm(e.h)}</span><div style="flex:1;min-width:0"><b>${esc(e.p)}</b><div class="small muted">${esc(e.t)} · ${e.du>=1?e.du+'h':Math.round(e.du*60)+' min'}</div></div><span class="pill ${e.k==='cir'?'p-'+doc[0]:'p-n'}">${kTag[e.k]}</span></div>`).join('')||'<p class="muted">Nenhum horário marcado neste dia.</p>'}</div>
+   <div><h3>Horários livres</h3><div style="display:flex;flex-wrap:wrap;gap:6px">${livres.map(h=>`<button class="addpin" data-act="agendar" data-med="${doc}" data-h="${h}">${String(h).padStart(2,'0')}:00</button>`).join('')||'<span class="muted">Dia cheio</span>'}</div></div></div>`;
+ }
+ const extra = doc==='marcela'
+  ? `<div class="legend"><span><i style="background:var(--marcela-soft);border:1px solid var(--marcela)"></i>Consultas, retornos e procedimentos</span><span><i style="background:var(--marcela)"></i>Cirurgias (hospital ou clínica)</span></div>`
+  : `<div class="legend"><span><i style="background:var(--rafaela-soft);border:1px solid var(--rafaela)"></i>Consultas, retornos, bioimpedância e soroterapia</span></div>`;
+ return head(DOCS[doc].nome+' · '+DOCS[doc].esp,doc,'Agenda <em>da semana</em>',`<div class="tabs"><button data-agv="dia" class="${agView==='dia'?'on':''}">Dia</button><button data-agv="semana" class="${agView==='semana'?'on':''}">Semana</button></div><button class="btn ${doc}" data-act="agendar" data-med="${doc}">+ Agendar</button>`)+
+  `<div class="panel"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px"><b>12 a 17 de outubro de 2026</b>${extra}</div>${html}</div>
+  <div class="grid g3" style="margin-top:16px">
+   <div class="panel kpi"><div class="l">Horários ocupados na semana</div><div class="v">${AG[doc].length}</div></div>
+   <div class="panel kpi"><div class="l">Primeiras consultas</div><div class="v">${AG[doc].filter(e=>e.k==='con').length}</div><div class="s">a origem de cada nova paciente fica na ficha</div></div>
+   <div class="panel kpi"><div class="l">${doc==='marcela'?'Cirurgias':'Retornos'}</div><div class="v">${AG[doc].filter(e=>e.k===(doc==='marcela'?'cir':'ret')).length}</div></div>
+  </div>`;
+}
+
+/* ---------- cirurgias ---------- */
+function vCirurgias(){
+ const c=CIR.find(x=>x.id===selCir), p=pacBy(c.pac);
+ const f=c.fin, custos=f.hospital+f.anestesista+f.auxiliar+f.materiais, total=f.honorario+custos;
+ const preOk=c.pre.filter(x=>x[1]).length;
+ const ini=n=>n.split(' ').filter(w=>/^[A-ZÁÉ]/.test(w)&&!/^Dr/.test(w)).map(w=>w[0]).slice(0,2).join('')||n[0];
+ return head('Dra. Marcela Corrêa · Cirurgia Plástica','marcela','Cirurgias <em>e pós-operatório</em>','<button class="btn marcela" data-act="nova-cir">+ Nova cirurgia</button>')+
+ `<div class="grid g-side">
+  <div class="surg">${CIR.map(x=>`<button class="scard ${x.id===selCir?'on':''}" data-c="${x.id}"><div style="display:flex;justify-content:space-between;gap:8px"><b>${x.proc}</b>${statusPill(x.status)}</div><div class="small muted" style="margin-top:4px">${pacBy(x.pac).nome}</div><div class="small" style="margin-top:6px"><b class="num">${dfmt(x.data)}</b> · ${x.hora} · ${x.localTipo==='Clínica'?'Na clínica':'Hospital'}</div></button>`).join('')}</div>
+  <div class="grid" style="align-content:start">
+   <div class="panel">
+    <div class="eyebrow c-marcela">${c.localTipo==='Clínica'?'Procedimento na clínica':'Cirurgia hospitalar'}</div>
+    <h2 style="font-family:var(--display);font-size:26px;font-weight:600;margin:2px 0 12px">${c.proc}</h2>
+    <div class="grid g2">
+     <dl class="kv"><dt>Paciente</dt><dd>${p.nome}</dd><dt>Data</dt><dd>${c.data.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'})}</dd><dt>Horário</dt><dd>${c.hora} · duração prevista ${c.dur}</dd></dl>
+     <dl class="kv"><dt>Local</dt><dd>${c.local}</dd><dt>Internação</dt><dd>${c.quarto}</dd><dt>Anestesia</dt><dd>${c.anest}</dd></dl>
+    </div>
+    ${p.alergias!=='Nenhuma conhecida'?`<div class="alert" style="margin-top:12px">Alergia: ${p.alergias}</div>`:''}
+    <h3 style="margin-top:16px">Equipe</h3><div class="team">${c.equipe.map(e=>`<div class="chip"><span class="av">${ini(e[0])}</span><span><b>${e[0]}</b> · <span class="muted">${e[1]}</span></span></div>`).join('')}</div>
+   </div>
+   <div class="grid g2">
+    <div class="panel"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Pré-operatório</h2><span class="small muted num">${preOk} de ${c.pre.length}</span></div>
+     <div class="bar" style="margin-bottom:8px"><span style="width:${preOk/c.pre.length*100}%;background:var(--marcela)"></span></div>
+     ${c.pre.map((x,i)=>`<label class="check"><input type="checkbox" id="pre-${c.id}-${i}" data-pre="${i}" ${x[1]?'checked':''}><span ${x[1]?'class="muted"':''}>${x[0]}</span></label>`).join('')}
+    <form class="addrow" data-addpre style="display:flex;gap:6px;margin-top:8px"><input id="pre-new" class="search" placeholder="Adicionar item ao checklist" style="padding:6px 10px"><button class="btn ghost" style="padding:6px 10px">Adicionar</button></form></div>
+    <div class="panel"><h2>Pós-operatório</h2><div class="small muted" style="margin-bottom:10px">Retornos calculados a partir da data da cirurgia</div>
+     <div class="tl">${c.pos.map((x,i)=>{const n=parseInt(x[0].slice(2));const dt=new Date(c.data);dt.setDate(dt.getDate()+n);return `<div class="st ${i===0?'next':''}"><b>${x[0]}</b> <span class="num muted">· ${dt.toLocaleDateString('pt-BR')}</span><div class="small">${x[1]}</div></div>`}).join('')}</div></div>
+   </div>
+   <div class="panel"><h2>Orçamento da cirurgia</h2>
+    <div class="tablewrap"><table><tbody>
+     <tr><td>Honorário médico (Dra. Marcela)</td><td class="r"><b>${brl(f.honorario)}</b></td></tr>
+     ${f.hospital?`<tr><td>Hospital (sala e diária)</td><td class="r">${brl(f.hospital)}</td></tr>`:''}
+     ${f.anestesista?`<tr><td>Anestesista</td><td class="r">${brl(f.anestesista)}</td></tr>`:''}
+     ${f.auxiliar?`<tr><td>Médica auxiliar</td><td class="r">${brl(f.auxiliar)}</td></tr>`:''}
+     ${f.materiais?`<tr><td>Materiais / próteses</td><td class="r">${brl(f.materiais)}</td></tr>`:''}
+     <tr><td><b>Total para a paciente</b></td><td class="r"><b>${brl(total)}</b></td></tr>
+    </tbody></table></div>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:10px"><span class="small muted">Pagamento: <b style="color:var(--ink)">${c.pago}</b></span><span class="small muted">Repasses a terceiros: <b class="num" style="color:var(--ink)">${brl(custos)}</b></span></div>
+   </div>
+  </div></div>`;
+}
+
+/* ---------- acompanhamentos ---------- */
+function vAcomp(){
+ return head('Dra. Rafaela Tridapalli · Prevenção e Nutrologia','rafaela','Acompanhamentos','<button class="btn rafaela" data-act="novo-plano">+ Novo plano</button>')+
+ `<div class="grid g3" style="margin-bottom:16px">
+  <div class="panel kpi"><div class="l">Planos ativos</div><div class="v">${ACOMP.filter(a=>a.evol!=='Concluído').length}</div></div>
+  <div class="panel kpi"><div class="l">Retornos nos próximos 7 dias</div><div class="v">3</div></div>
+  <div class="panel kpi"><div class="l">Aguardando exames</div><div class="v">1</div></div>
+ </div>
+ <div class="panel"><div class="tablewrap"><table><thead><tr><th>Paciente</th><th>Plano</th><th>Progresso</th><th>Próximo retorno</th><th>Exames</th><th>Meta</th><th class="r">Evolução</th></tr></thead><tbody>
+ ${ACOMP.map(a=>`<tr><td><b>${a.pac}</b><div class="small muted">desde ${a.inicio}</div></td><td>${a.plano}</td><td style="min-width:120px"><div class="bar"><span style="width:${a.fase/a.total*100}%;background:var(--rafaela)"></span></div><div class="small muted num">${a.fase} de ${a.total}</div></td><td class="num">${a.prox}</td><td><span class="pill ${a.exames.startsWith('Aguard')?'p-warn':'p-ok'}">${a.exames}</span></td><td>${a.meta}</td><td class="r"><b>${a.evol}</b></td></tr>`).join('')}
+ </tbody></table></div>
+ <div class="note" style="margin-top:12px">Cada consulta registra peso, bioimpedância e exames do paciente, e o sistema monta o gráfico de evolução na ficha. Pacientes encaminhadas para cirurgia aparecem para a Dra. Marcela com a liberação nutrológica.</div></div>`;
+}
+
+/* ---------- financeiro médica ---------- */
+function liquido(r){return r.valor*(1-taxa(r.forma,r.parc)/100)}
+function parcelasFuturas(doc){
+ const meses={};
+ REC[doc].forEach(r=>{
+  const [d,m]=r.data.split('/').map(Number);
+  const n=r.forma==='parcelado'?r.parc:1;
+  if(r.forma==='pix'||r.forma==='dinheiro')return;
+  for(let i=0;i<n;i++){
+   const dt=new Date(2026,m-1+(r.forma==='debito'?0:i+1),d);
+   if(r.forma==='debito')dt.setDate(dt.getDate()+1);
+   if(dt<=TODAY)continue;
+   const k=dt.getFullYear()*100+dt.getMonth();
+   meses[k]=(meses[k]||0)+liquido(r)/n;
+  }
+ });
+ return Object.entries(meses).sort((a,b)=>a[0]-b[0]).map(([k,v])=>[new Date(Math.floor(k/100),k%100,1),v]);
+}
+function vFin(doc){
+ CUSTOS[doc].forEach(c=>{if(c[1]==='Clínica')c[2]=(FOLHA.reduce((s,f)=>s+f[3],0)+DESP.reduce((s,d)=>s+d[2],0))/2});
+ const rec=REC[doc], bruto=rec.reduce((s,r)=>s+r.valor,0), tx=rec.reduce((s,r)=>s+r.valor-liquido(r),0);
+ const custos=CUSTOS[doc].reduce((s,c)=>s+c[2],0);
+ const fut=parcelasFuturas(doc), aReceber=fut.reduce((s,f)=>s+f[1],0);
+ const porForma={};rec.forEach(r=>porForma[r.forma]=(porForma[r.forma]||0)+r.valor);
+ const maxF=Math.max(...Object.values(porForma));
+ const tab=finTab[doc];
+ const tabs=`<div class="tabs" data-fintabs="${doc}"><button data-t="lanc" class="${tab==='lanc'?'on':''}">Recebimentos</button><button data-t="parc" class="${tab==='parc'?'on':''}">A receber</button><button data-t="cust" class="${tab==='cust'?'on':''}">Custos e repasses</button></div>`;
+ let body='';
+ if(tab==='lanc') body=`<div class="tablewrap"><table><thead><tr><th>Data</th><th>Paciente</th><th>Serviço</th><th>Forma</th><th class="r">Valor</th><th class="r">Taxa</th><th class="r">Líquido</th></tr></thead><tbody>
+  ${rec.slice().reverse().map(r=>`<tr><td class="num">${r.data}</td><td><b>${r.pac}</b></td><td>${r.serv}</td><td><span class="pill p-n">${FORMAS[r.forma]}${r.forma==='parcelado'?' '+r.parc+'x':''}</span></td><td class="r">${brl(r.valor)}</td><td class="r muted">${taxa(r.forma,r.parc)?taxa(r.forma,r.parc).toFixed(2).replace('.',',')+'%':'—'}</td><td class="r"><b>${brl(liquido(r))}</b></td></tr>`).join('')}
+  </tbody></table></div>`;
+ if(tab==='parc'){const mx=Math.max(...fut.map(f=>f[1]),1);body=`<p class="small muted" style="margin-top:0">Parcelas de cartão que ainda vão cair na conta, já descontada a taxa da maquininha.</p>${fut.map(([d,v])=>`<div class="payrow"><span>${d.toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}</span><div class="bar"><span style="width:${v/mx*100}%;background:var(--${doc})"></span></div><b class="num" style="text-align:right">${brl(v)}</b></div>`).join('')}`}
+ if(tab==='cust') body=`<div class="tablewrap"><table><thead><tr><th>Descrição</th><th>Tipo</th><th>Situação</th><th class="r">Valor</th></tr></thead><tbody>${CUSTOS[doc].map((c,i)=>`<tr><td>${c[0]}</td><td><span class="pill ${c[1]==='Clínica'?'p-c':'p-n'}">${c[1]}</span></td><td><button class="pill pbtn ${c[3]==='pago'?'p-ok':'p-warn'}" data-custo="${doc}:${i}" title="Clique para alterar">${c[3]}</button></td><td class="r">${brl(c[2])}</td></tr>`).join('')}</tbody></table></div>`;
+ return head(DOCS[doc].nome+' · financeiro próprio',doc,'Financeiro <em>· outubro</em>',`<button class="btn ${doc}" data-novo="${doc}">+ Registrar recebimento</button>`)+
+ `<div class="grid g4" style="margin-bottom:16px">
+  <div class="panel kpi"><div class="l">Faturado no mês</div><div class="v">${brl(bruto)}</div><div class="s">${rec.length} recebimentos</div></div>
+  <div class="panel kpi"><div class="l">Taxas de cartão</div><div class="v">${brl(tx)}</div><div class="s">${(tx/bruto*100).toFixed(1).replace('.',',')}% do faturado</div></div>
+  <div class="panel kpi"><div class="l">${doc==='marcela'?'Custos, repasses e rateio':'Custos e rateio'}</div><div class="v">${brl(custos)}</div></div>
+  <div class="panel kpi"><div class="l">Resultado do mês</div><div class="v" style="color:var(--${bruto-tx-custos>=0?'ok':'bad'})">${brl(bruto-tx-custos)}</div><div class="s">faturado − taxas − custos</div></div>
+ </div>
+ <div class="grid g-side" style="grid-template-columns:minmax(0,1fr) minmax(0,2fr)">
+  <div class="panel"><h2>Por forma de pagamento</h2>${Object.entries(porForma).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="payrow" style="grid-template-columns:110px 1fr"><span>${FORMAS[k]}</span><b class="num" style="text-align:right">${brl(v)}</b><div class="bar" style="grid-column:1/-1"><span style="width:${v/maxF*100}%;background:var(--${doc})"></span></div></div>`).join('')}
+   <div style="border-top:1px solid var(--line);margin-top:12px;padding-top:12px" class="kpi"><div class="l">Ainda a receber (cartão)</div><div class="v">${brl(aReceber)}</div><div class="s">${fut.length} meses à frente</div></div></div>
+  <div class="panel">${tabs}<div style="margin-top:14px">${body}</div></div>
+ </div>
+ <div class="note" style="margin-top:16px">Taxas de cartão de exemplo (débito ${TAXAS.debito}%, crédito ${TAXAS.credito}%, parcelado até 6x ${TAXAS.parc26}%, de 7x a 12x ${TAXAS.parc712}%). No sistema real cada médica cadastra as taxas da própria maquininha.</div>`;
+}
+
+/* ---------- financeiro clínica ---------- */
+function vFinClinica(){
+ const folha=FOLHA.reduce((s,f)=>s+f[3],0), desp=DESP.reduce((s,d)=>s+d[2],0), tot=folha+desp;
+ const pago=DESP.filter(d=>d[4]==='pago').reduce((s,d)=>s+d[2],0);
+ const cat={};DESP.forEach(d=>cat[d[1]]=(cat[d[1]]||0)+d[2]);cat['Folha']=(cat['Folha']||0)+folha;
+ const mx=Math.max(...Object.values(cat));
+ return head('Clínica · custos compartilhados','clinica','Financeiro <em>da clínica</em>','<button class="btn ghost" data-act="novo-func">+ Funcionário</button><button class="btn" data-act="nova-desp">+ Despesa</button>')+
+ `<div class="grid g4" style="margin-bottom:16px">
+  <div class="panel kpi"><div class="l">Custo total de outubro</div><div class="v">${brl(tot)}</div></div>
+  <div class="panel kpi"><div class="l">Folha de pagamento</div><div class="v">${brl(folha)}</div><div class="s">${FOLHA.length} pessoas</div></div>
+  <div class="panel kpi"><div class="l">Já pago</div><div class="v">${brl(pago)}</div></div>
+  <div class="panel kpi"><div class="l">Rateio por médica</div><div class="v">${brl(tot/2)}</div><div class="s">50% / 50% · lançado no financeiro de cada uma</div></div>
+ </div>
+ <div class="grid g-side" style="grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);margin-bottom:16px">
+  <div class="panel"><h2>Despesas do mês</h2><div class="tablewrap"><table><thead><tr><th>Despesa</th><th>Tipo</th><th>Vencimento</th><th>Situação</th><th class="r">Valor</th></tr></thead><tbody>
+   ${DESP.map((d,i)=>`<tr><td>${esc(d[0])}</td><td><span class="pill p-n">${d[1]}</span></td><td class="num">${d[3]}</td><td><button class="pill pbtn ${d[4]==='pago'?'p-ok':'p-warn'}" data-desp="${i}" title="Clique para alterar">${d[4]}</button></td><td class="r">${brl(d[2])}</td></tr>`).join('')}
+  </tbody></table></div></div>
+  <div class="panel"><h2>Para onde vai o dinheiro</h2>${Object.entries(cat).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="payrow" style="grid-template-columns:90px 1fr 92px"><span>${k}</span><div class="bar"><span style="width:${v/mx*100}%;background:var(--clinica)"></span></div><b class="num" style="text-align:right">${brl(v)}</b></div>`).join('')}</div>
+ </div>
+ <div class="panel"><h2>Funcionários e prestadores</h2><div class="tablewrap"><table><thead><tr><th>Nome</th><th>Função</th><th>Vínculo</th><th>Próximo pagamento</th><th class="r">Valor mensal</th></tr></thead><tbody>
+  ${FOLHA.map(f=>`<tr><td><b>${f[0]}</b></td><td>${f[1]}</td><td><span class="pill p-n">${f[2]}</span></td><td class="num">${f[4]}</td><td class="r">${brl(f[3])}</td></tr>`).join('')}
+ </tbody></table></div><div class="note" style="margin-top:12px">Instrumentadora e auxiliares pagos por cirurgia podem ser lançados aqui ou direto como repasse no financeiro da Dra. Marcela.</div></div>`;
+}
+
+/* ---------- modal novo recebimento ---------- */
+function modalNovo(doc){
+ const L=document.getElementById('layer');
+ L.innerHTML=`<div class="ov" data-close><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mt">
+  <div class="eyebrow c-${doc}">${DOCS[doc].nome}</div><h2 id="mt" style="font-family:var(--display);font-size:24px;font-weight:600;margin:2px 0 14px">Registrar recebimento</h2>
+  <form id="fn" class="grid" style="gap:12px">
+   <label class="f">Paciente<select id="n-pac">${PAC.filter(p=>p.medicas.includes(doc)).map(p=>`<option>${p.nome}</option>`).join('')}</select></label>
+   <label class="f">Serviço<select id="n-serv">${SERVICOS[doc].map(s=>`<option>${s}</option>`).join('')}</select></label>
+   <div class="grid g2" style="gap:12px"><label class="f">Valor (R$)<input id="n-val" type="number" min="0" step="0.01" value="1500"></label>
+   <label class="f">Forma de pagamento<select id="n-forma">${Object.entries(FORMAS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></label></div>
+   <label class="f" id="n-parc-w" hidden>Número de parcelas<select id="n-parc">${Array.from({length:11},(_,i)=>`<option>${i+2}</option>`).join('')}</select></label>
+   <div class="note" id="n-res"></div>
+   <div style="display:flex;justify-content:flex-end;gap:8px"><button type="button" class="btn ghost" data-close>Cancelar</button><button class="btn ${doc}" type="submit">Registrar</button></div>
+  </form></div></div>`;
+ const upd=()=>{
+  const v=+document.getElementById('n-val').value||0, fo=document.getElementById('n-forma').value, pa=+document.getElementById('n-parc').value;
+  document.getElementById('n-parc-w').hidden=fo!=='parcelado';
+  const t=taxa(fo,pa), liq=v*(1-t/100);
+  let txt=`Taxa: <b>${t?t.toFixed(2).replace('.',',')+'%':'sem taxa'}</b> · Líquido: <b>${brl(liq)}</b>`;
+  if(fo==='parcelado')txt+=`<br>${pa}x de ${brl(v/pa)} para a paciente · cai ${brl(liq/pa)} por mês de nov/26 a ${new Date(2026,9+pa,1).toLocaleDateString('pt-BR',{month:'short',year:'2-digit'})}`;
+  if(fo==='credito')txt+='<br>Crédito à vista: cai em 30 dias.';
+  if(fo==='debito')txt+='<br>Débito: cai no dia útil seguinte.';
+  document.getElementById('n-res').innerHTML=txt;
+ };
+ L.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',upd));upd();
+ document.getElementById('n-val').focus();
+ document.getElementById('fn').addEventListener('submit',e=>{e.preventDefault();
+  const fo=document.getElementById('n-forma').value;
+  REC[doc].push({data:'16/10',pac:document.getElementById('n-pac').value,serv:document.getElementById('n-serv').value,forma:fo,parc:fo==='parcelado'?+document.getElementById('n-parc').value:1,valor:+document.getElementById('n-val').value||0});
+  L.innerHTML='';finTab[doc]='lanc';render();toast('Recebimento registrado');});
+}
+function toast(t){const el=document.createElement('div');el.className='toast';el.textContent=t;document.body.appendChild(el);setTimeout(()=>el.remove(),2200)}
+document.getElementById('layer').addEventListener('click',e=>{if(e.target.matches('[data-close]'))document.getElementById('layer').innerHTML=''});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('layer').innerHTML=''});
+
+/* ---------- formulários e ações ---------- */
+const fld=(l,id,v='',t='text',a='')=>`<label class="f">${l}<input id="${id}" type="${t}" value="${esc(v)}" ${a}></label>`;
+const sel=(l,id,opts,v='')=>`<label class="f">${l}<select id="${id}">${opts.map(o=>{const [val,txt]=Array.isArray(o)?o:[o,o];return `<option value="${esc(val)}" ${String(val)===String(v)?'selected':''}>${esc(txt)}</option>`}).join('')}</select></label>`;
+const txa=(l,id,v='')=>`<label class="f">${l}<textarea id="${id}" rows="2">${esc(v)}</textarea></label>`;
+const gv=id=>{const el=document.getElementById(id);return el?el.value.trim():''};
+function openModal(cls,eyebrow,title,inner,onSubmit,submitTxt='Salvar',extraBtns=''){
+ const L=document.getElementById('layer');
+ L.innerHTML=`<div class="ov" data-close><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mtt">
+  <div class="eyebrow c-${cls}">${eyebrow}</div><h2 id="mtt" style="font-family:var(--display);font-size:24px;font-weight:600;margin:2px 0 14px">${title}</h2>
+  <form id="mf" class="grid" style="gap:12px">${inner}
+   ${onSubmit?`<div id="m-err" class="small" style="color:var(--bad)"></div>`:''}
+   <div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap">${extraBtns}<button type="button" class="btn ghost" data-close>${onSubmit?'Cancelar':'Fechar'}</button>${onSubmit?`<button class="btn ${cls==='clinica'?'':cls}" type="submit">${submitTxt}</button>`:''}</div>
+  </form></div></div>`;
+ const f=document.getElementById('mf');const first=f.querySelector('input,select,textarea');if(first)first.focus();
+ f.addEventListener('submit',e=>{e.preventDefault();if(!onSubmit)return;const err=onSubmit();if(err){document.getElementById('m-err').textContent=err;return}L.innerHTML='';render()});
+ return f;
+}
+const ORIGENS=['Instagram (anúncio)','Instagram (orgânico)','Google (pesquisa)','Google (perfil da empresa)','Indicação de paciente','Indicação médica','Site','Outro'];
+const isoToBR=s=>{if(!s)return'';const [a,m,d]=s.split('-');return `${d}/${m}/${a}`};
+const brToISO=s=>{if(!s||!s.includes('/'))return'';const [d,m,a]=s.split('/');return `${a}-${m}-${d}`};
+
+function formPac(p){
+ p=p||{nome:'',nasc:'',cpf:'',tel:'',email:'',cidade:'Blumenau/SC',origem:ORIGENS[0],medicas:[],alergias:'Nenhuma conhecida',meds:'—',hist:'',obs:'',lgpd:false};
+ return `${fld('Nome completo','f-nome',p.nome)}
+  <div class="grid g2" style="gap:12px">${fld('Nascimento','f-nasc',brToISO(p.nasc),'date')}${fld('CPF','f-cpf',p.cpf,'text','inputmode="numeric"')}</div>
+  <div class="grid g2" style="gap:12px">${fld('WhatsApp','f-tel',p.tel,'tel')}${fld('E-mail','f-email',p.email,'email')}</div>
+  <div class="grid g2" style="gap:12px">${fld('Cidade','f-cid',p.cidade)}${sel('Como conheceu a clínica','f-orig',ORIGENS,p.origem)}</div>
+  <div class="f">Atendida por<div style="display:flex;gap:14px;flex-wrap:wrap;color:var(--ink);font-weight:500;font-size:14px">
+   <label><input type="checkbox" id="f-mm" ${p.medicas.includes('marcela')?'checked':''}> Dra. Marcela</label>
+   <label><input type="checkbox" id="f-mr" ${p.medicas.includes('rafaela')?'checked':''}> Dra. Rafaela</label></div></div>
+  <div class="grid g2" style="gap:12px">${fld('Alergias','f-alg',p.alergias)}${fld('Medicações em uso','f-med',p.meds)}</div>
+  ${txa('Histórico de saúde','f-hist',p.hist)}${txa('Observações','f-obs',p.obs)}
+  <label style="display:flex;gap:8px;align-items:center;font-size:14px"><input type="checkbox" id="f-lgpd" ${p.lgpd?'checked':''}> Termo LGPD e uso de imagem assinado</label>`;
+}
+function lerPac(p){
+ const nome=gv('f-nome');if(nome.length<3)return 'Informe o nome completo.';
+ const meds=[document.getElementById('f-mm').checked&&'marcela',document.getElementById('f-mr').checked&&'rafaela'].filter(Boolean);
+ if(!meds.length)return 'Marque ao menos uma médica.';
+ Object.assign(p,{nome,nasc:isoToBR(gv('f-nasc'))||'01/01/1990',cpf:gv('f-cpf')||'—',tel:gv('f-tel')||'—',email:gv('f-email')||'—',cidade:gv('f-cid')||'—',origem:gv('f-orig'),medicas:meds,alergias:gv('f-alg')||'Nenhuma conhecida',meds:gv('f-med')||'—',hist:gv('f-hist'),obs:gv('f-obs'),lgpd:document.getElementById('f-lgpd').checked});
+}
+function novoPac(){openModal('clinica','Clínica','Novo paciente',formPac(),()=>{
+ const p={id:Math.max(...PAC.map(x=>x.id))+1};const e=lerPac(p);if(e)return e;
+ p.linha=[['16/10',p.medicas[0],'Cadastro do paciente']];EVOL[p.id]=[];DOCSPAC[p.id]=[];PINS[p.id]=[];
+ PAC.push(p);selPac=p.id;pacTab='dados';route='pacientes';autor=p.medicas[0];toast('Paciente cadastrado');
+},'Cadastrar')}
+function editPac(){const p=pacBy(selPac);openModal('clinica','Ficha do paciente','Editar dados',formPac(p),()=>{const old=p.nome;const e=lerPac(p);if(e)return e;
+ if(old!==p.nome)['marcela','rafaela'].forEach(d=>{REC[d].forEach(r=>{if(r.pac===old)r.pac=p.nome});AG[d].forEach(a=>{if(a.p===old)a.p=p.nome})});toast('Ficha atualizada')})}
+
+function agendar(doc,h){
+ const nomes=PAC.filter(p=>p.medicas.includes(doc)).map(p=>p.nome);
+ const tipos=doc==='marcela'?[['con','Consulta'],['ret','Retorno'],['proc','Procedimento'],['cir','Cirurgia']]:[['con','Consulta'],['ret','Retorno'],['proc','Bioimpedância / soroterapia']];
+ openModal(doc,DOCS[doc].nome,'Novo agendamento',`
+  <label class="f">Paciente<input id="a-p" list="a-pl" placeholder="Nome do paciente"><datalist id="a-pl">${nomes.map(n=>`<option value="${esc(n)}">`).join('')}</datalist></label>
+  <div class="grid g2" style="gap:12px">${sel('Tipo','a-k',tipos)}${fld('Descrição','a-t','','text','placeholder="Ex.: Toxina botulínica"')}</div>
+  <div class="grid g3" style="gap:12px">${sel('Dia','a-d',DIAS.map((d,i)=>[i,d]),agView==='dia'?agDia:4)}${fld('Horário','a-h',h!==undefined?String(h).padStart(2,'0')+':00':'09:00','time','step="900"')}${sel('Duração','a-du',[[.5,'30 min'],[.75,'45 min'],[1,'1h'],[1.5,'1h30'],[2,'2h'],[3,'3h'],[4,'4h']],1)}</div>
+  <p class="small muted" style="margin:0">A semana de exemplo vai de 12 a 17/10.</p>`,()=>{
+  const p=gv('a-p');if(!p)return 'Informe o paciente.';
+  const [H,M]=gv('a-h').split(':').map(Number);if(isNaN(H))return 'Informe o horário.';
+  const k=gv('a-k');const t=gv('a-t')||tipos.find(x=>x[0]===k)[1];
+  const ev={d:+gv('a-d'),h:H+(M||0)/60,du:+gv('a-du'),t,p,k};
+  if(ev.h<7||ev.h+ev.du>19)return 'Escolha um horário entre 7h e 19h.';
+  const choque=AG[doc].find(e=>e.d===ev.d&&ev.h<e.h+e.du&&ev.h+ev.du>e.h);if(choque)return `Conflito com ${choque.p} às ${hhmm(choque.h)}.`;
+  AG[doc].push(ev);toast('Horário agendado');
+ },'Agendar')}
+function verEvento(doc,i){
+ const e=AG[doc][i];const p=PAC.find(x=>x.nome===e.p);
+ const f=openModal(doc,DOCS[doc].nome,esc(e.p),`<dl class="kv"><dt>Atendimento</dt><dd>${esc(e.t)}</dd><dt>Tipo</dt><dd>${kTag[e.k]}</dd><dt>Quando</dt><dd>${DIAS[e.d]}/10 às ${hhmm(e.h)}</dd><dt>Duração</dt><dd>${e.du>=1?e.du+'h':Math.round(e.du*60)+' min'}</dd></dl>
+  ${p?'':'<div class="note">Paciente ainda sem ficha. Cadastre para guardar histórico e documentos.</div>'}`,null,'',
+  `<button type="button" class="btn ghost" id="ev-del">Desmarcar</button>${p?`<button type="button" class="btn ${doc}" data-openpac="${p.id}">Abrir ficha</button>`:'<button type="button" class="btn ghost" data-act="novo-pac">Cadastrar paciente</button>'}`);
+ const del=document.getElementById('ev-del');
+ del.addEventListener('click',()=>{if(del.dataset.ok){AG[doc].splice(i,1);document.getElementById('layer').innerHTML='';render();toast('Horário desmarcado')}else{del.dataset.ok=1;del.textContent='Confirmar desmarcação';del.style.color='var(--bad)'}});
+}
+
+const PROCS=['Rinoplastia','Blefaroplastia','Otoplastia','Lobuloplastia','Lifting facial','Mamoplastia de aumento','Mamoplastia redutora','Mastopexia','Abdominoplastia','Miniabdominoplastia','Lipoaspiração','Outro'];
+function novaCir(){
+ const pacs=PAC.filter(p=>p.medicas.includes('marcela'));
+ openModal('marcela','Dra. Marcela Corrêa','Nova cirurgia',`
+  <div class="grid g2" style="gap:12px">${sel('Paciente','c-p',pacs.map(p=>[p.id,p.nome]))}${sel('Procedimento','c-proc',PROCS)}</div>
+  ${fld('Detalhe (opcional)','c-det','','text','placeholder="Ex.: estruturada, com enxerto de costela"')}
+  <div class="grid g3" style="gap:12px">${fld('Data','c-data','2026-11-19','date')}${fld('Horário','c-hora','08:00','time')}${fld('Duração prevista','c-dur','2h')}</div>
+  <div class="grid g2" style="gap:12px">${sel('Onde','c-lt',[['Hospital','Hospital'],['Clínica','Na clínica (sala de procedimentos)']])}${fld('Nome do hospital / sala','c-local','','text','placeholder="Ex.: Hospital X, centro cirúrgico"')}</div>
+  <div class="grid g2" style="gap:12px">${sel('Anestesia','c-an',['Geral','Peridural + sedação','Local + sedação','Local'])}${sel('Internação','c-int',['Day clinic · alta no mesmo dia','Internação 1 diária','Internação 2 diárias','Ambulatorial'])}</div>
+  <h3 style="margin:4px 0 0">Equipe</h3>
+  <div class="grid g3" style="gap:12px">${fld('Anestesista','c-ane','','text','placeholder="Nome"')}${fld('Auxiliar','c-aux','','text','placeholder="Nome"')}${fld('Instrumentadora','c-ins','','text','placeholder="Nome"')}</div>
+  <h3 style="margin:4px 0 0">Orçamento (R$)</h3>
+  <div class="grid g3" style="gap:12px">${fld('Honorário','c-v1','10000','number')}${fld('Hospital','c-v2','0','number')}${fld('Anestesista','c-v3','0','number')}${fld('Auxiliar','c-v4','0','number')}${fld('Materiais / próteses','c-v5','0','number')}${sel('Pagamento','c-pg',['Aguardando sinal','Sinal pago (30%)','Pix à vista na data','Parcelado no cartão','Pago integral'])}</div>
+  <p class="small muted" style="margin:0">O checklist de pré-operatório e os retornos do pós já vêm preenchidos com o modelo padrão e podem ser ajustados depois.</p>`,()=>{
+  const d=gv('c-data');if(!d)return 'Informe a data.';const [a,m,dd]=d.split('-').map(Number);
+  const lt=gv('c-lt');const proc=gv('c-proc')+(gv('c-det')?' '+gv('c-det'):'');
+  const equipe=[['Dra. Marcela Corrêa','Cirurgiã']];[['c-ane','Anestesista'],['c-aux','Auxiliar'],['c-ins','Instrumentadora']].forEach(([id,f])=>{if(gv(id))equipe.push([gv(id),f])});
+  const c={id:'c'+Date.now(),pac:+gv('c-p'),proc,data:new Date(a,m-1,dd),hora:gv('c-hora'),dur:gv('c-dur'),localTipo:lt,local:gv('c-local')||(lt==='Clínica'?'Na clínica (sala de procedimentos)':'Hospital (a definir)'),quarto:gv('c-int'),anest:gv('c-an'),equipe,
+   pre:['Consulta de avaliação','Exames laboratoriais','Avaliação cardiológica / ECG','Termo de consentimento assinado','Fotos pré-operatórias','Orientação de jejum'].map((x,i)=>[x,i===0]),
+   pos:[['D+1','Contato da equipe'],['D+7','Retorno e curativo'],['D+30','Retorno + fotos'],['D+90','Retorno'],['D+180','Avaliação + fotos']],
+   fin:{honorario:+gv('c-v1')||0,hospital:+gv('c-v2')||0,anestesista:+gv('c-v3')||0,auxiliar:+gv('c-v4')||0,materiais:+gv('c-v5')||0},pago:gv('c-pg'),status:'Pendências'};
+  CIR.push(c);selCir=c.id;const p=pacBy(c.pac);p.linha.push([dfmt(c.data),'marcela','Cirurgia agendada · '+proc]);PROX[p.id]=`${dfmt(c.data)} · Cirurgia · ${proc}`;
+  if(m===10&&dd>=12&&dd<=17){const [H,M]=c.hora.split(':').map(Number);AG.marcela.push({d:dd-12,h:H+(M||0)/60,du:parseFloat(c.dur)||2,t:'Cirurgia · '+gv('c-proc'),p:lt==='Clínica'?p.nome:'Hospital',k:'cir'})}
+  toast('Cirurgia agendada');
+ },'Agendar cirurgia')}
+
+function novoPlano(){
+ const nomes=PAC.filter(p=>p.medicas.includes('rafaela')).map(p=>p.nome);
+ openModal('rafaela','Dra. Rafaela Tridapalli','Novo plano de acompanhamento',`
+  <label class="f">Paciente<input id="pl-p" list="pl-l"><datalist id="pl-l">${nomes.map(n=>`<option value="${esc(n)}">`).join('')}</datalist></label>
+  <div class="grid g2" style="gap:12px">${sel('Tipo de plano','pl-t',['Trimestral · emagrecimento','Trimestral · recomposição corporal','Semestral · emagrecimento','Preparo pré-cirúrgico','Check-up preventivo anual','Soroterapia · pacote','Outro'])}${fld('Nº de consultas/etapas','pl-n','3','number','min="1"')}</div>
+  <div class="grid g2" style="gap:12px">${fld('Próximo retorno','pl-r','2026-11-16','date')}${fld('Meta','pl-m','','text','placeholder="Ex.: −5 kg"')}</div>`,()=>{
+  const p=gv('pl-p');if(!p)return 'Informe o paciente.';
+  ACOMP.unshift({pac:p,plano:gv('pl-t'),inicio:'16/10',fase:1,total:Math.max(1,+gv('pl-n')||1),prox:isoToBR(gv('pl-r')).slice(0,5)||'—',exames:'Aguardando resultados',meta:gv('pl-m')||'—',evol:'—'});toast('Plano criado');
+ },'Criar plano')}
+
+function novoFunc(){openModal('clinica','Financeiro da clínica','Novo funcionário ou prestador',`
+  <div class="grid g2" style="gap:12px">${fld('Nome','fu-n')}${fld('Função','fu-f','','text','placeholder="Ex.: Recepcionista"')}</div>
+  <div class="grid g3" style="gap:12px">${sel('Vínculo','fu-v',['CLT','PJ','Por cirurgia (PJ)','Estágio','Diarista'])}${fld('Valor mensal (R$)','fu-s','2000','number')}${fld('Dia do pagamento','fu-d','05/11')}</div>`,()=>{
+  if(!gv('fu-n'))return 'Informe o nome.';FOLHA.push([gv('fu-n'),gv('fu-f')||'—',gv('fu-v'),+gv('fu-s')||0,gv('fu-d')||'—']);toast('Cadastro incluído na folha')},'Incluir')}
+function novaDesp(){openModal('clinica','Financeiro da clínica','Nova despesa',`
+  ${fld('Descrição','de-n','','text','placeholder="Ex.: Conta de água"')}
+  <div class="grid g2" style="gap:12px">${sel('Tipo','de-t',['Fixa','Variável','Folha','Marketing','Impostos','Equipamentos'])}${fld('Valor (R$)','de-v','','number','step="0.01"')}</div>
+  <div class="grid g2" style="gap:12px">${fld('Vencimento','de-d','2026-10-30','date')}${sel('Situação','de-s',['a vencer','pago'])}</div>`,()=>{
+  if(!gv('de-n'))return 'Informe a descrição.';if(!(+gv('de-v')>0))return 'Informe o valor.';
+  DESP.push([gv('de-n'),gv('de-t'),+gv('de-v'),isoToBR(gv('de-d')).slice(0,5)||'—',gv('de-s')]);toast('Despesa lançada')},'Lançar')}
+function complemento(id){
+ const e=evolDe(pacBy(selPac)).find(x=>x.id===id);
+ openModal(e.med,e.tipo+' · '+e.data,'Adicionar complemento',`${txa('Complemento','cp-t')}<p class="small muted" style="margin:0">O registro original não muda. O complemento fica com data e autora.</p>`,()=>{
+  if(!gv('cp-t'))return 'Escreva o complemento.';e.campos.push(['Complemento 16/10',gv('cp-t')]);toast('Complemento adicionado')},'Adicionar')}
+
+/* ---------- salvar no navegador ---------- */
+const KEY='clinica-demo-v3';
+const INIT=JSON.stringify({PAC,CIR,AG,REC,CUSTOS,ACOMP,FOLHA,DESP,EVOL,DOCSPAC,PINS,PROX});
+function restore(json){
+ const s=JSON.parse(json);
+ const arr=(a,b)=>a.splice(0,a.length,...b), obj=(a,b)=>{Object.keys(a).forEach(k=>delete a[k]);Object.assign(a,b)};
+ arr(PAC,s.PAC);arr(CIR,s.CIR.map(c=>({...c,data:new Date(c.data)})));obj(AG,s.AG);REC=s.REC;obj(CUSTOS,s.CUSTOS);arr(ACOMP,s.ACOMP);arr(FOLHA,s.FOLHA);arr(DESP,s.DESP);obj(EVOL,s.EVOL);obj(DOCSPAC,s.DOCSPAC);obj(PINS,s.PINS);obj(PROX,s.PROX);
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({PAC,CIR,AG,REC,CUSTOS,ACOMP,FOLHA,DESP,EVOL,DOCSPAC,PINS,PROX}))}catch(e){}}
+function load(){try{const s=localStorage.getItem(KEY);if(s)restore(s)}catch(e){}}
+function resetDemo(){
+ const b=document.getElementById('reset');
+ if(!b.dataset.ok){b.dataset.ok=1;b.textContent='Clique de novo para confirmar';setTimeout(()=>{if(b){delete b.dataset.ok;b.textContent='Restaurar dados de exemplo'}},4000);return}
+ try{localStorage.removeItem(KEY)}catch(e){}restore(INIT);selPac=2;selCir='c1';route='painel';delete b.dataset.ok;b.textContent='Restaurar dados de exemplo';render();toast('Dados de exemplo restaurados');
+}
+document.addEventListener('click',e=>{
+ const t=e.target.closest('[data-act],[data-ev],[data-gocir],[data-openpac],[data-go],[data-agv],[data-agdia],[data-comp],[data-desp],[data-custo],#reset');if(!t)return;
+ if(t.id==='reset'){resetDemo();return}
+ const a=t.dataset.act;
+ if(a==='novo-pac')novoPac();
+ else if(a==='edit-pac')editPac();
+ else if(a==='agendar')agendar(t.dataset.med,t.dataset.h!==undefined?+t.dataset.h:undefined);
+ else if(a==='nova-cir')novaCir();
+ else if(a==='novo-plano')novoPlano();
+ else if(a==='novo-func')novoFunc();
+ else if(a==='nova-desp')novaDesp();
+ else if(t.dataset.ev){const [d,i]=t.dataset.ev.split(':');verEvento(d,+i)}
+ else if(t.dataset.gocir){selCir=t.dataset.gocir;go('cirurgias')}
+ else if(t.dataset.openpac){document.getElementById('layer').innerHTML='';selPac=+t.dataset.openpac;pacTab='evol';const m=pacBy(selPac).medicas;if(!m.includes(autor))autor=m[0];go('pacientes')}
+ else if(t.dataset.go){go(t.dataset.go)}
+ else if(t.dataset.agv){agView=t.dataset.agv;render()}
+ else if(t.dataset.agdia){agDia=+t.dataset.agdia;render()}
+ else if(t.dataset.comp){complemento(t.dataset.comp)}
+ else if(t.dataset.desp!==undefined){const d=DESP[+t.dataset.desp];d[4]=d[4]==='pago'?'a vencer':'pago';render();toast(d[4]==='pago'?'Marcada como paga':'Marcada como a vencer')}
+ else if(t.dataset.custo){const [doc,i]=t.dataset.custo.split(':');const c=CUSTOS[doc][+i];c[3]=c[3]==='pago'?'a vencer':'pago';render()}
+});
+
+/* ---------- render ---------- */
+const V=document.getElementById('view');
+V.addEventListener('click',e=>{
+ const p=e.target.closest('[data-p]');if(p){selPac=+p.dataset.p;docFiltro='Todos';evolFiltro='todas';pendAnexos=[];const m=pacBy(selPac).medicas;if(!m.includes(autor))autor=m[0];render();return}
+ const c=e.target.closest('.scard');if(c){selCir=c.dataset.c;render();return}
+ const t=e.target.closest('[data-fintabs] button');if(t){finTab[t.parentElement.dataset.fintabs]=t.dataset.t;render();return}
+ const n=e.target.closest('[data-novo]');if(n){modalNovo(n.dataset.novo);return}
+});
+V.addEventListener('click',e=>{
+ const t=e.target.closest('[data-ptab],[data-autor],[data-ef],[data-df],[data-doc],[data-unpin],[data-addpin]');if(!t)return;
+ if(t.dataset.ptab){pacTab=t.dataset.ptab;render()}
+ else if(t.dataset.autor){autor=t.dataset.autor;render()}
+ else if(t.dataset.ef){evolFiltro=t.dataset.ef;render()}
+ else if(t.dataset.df){docFiltro=t.dataset.df;render()}
+ else if(t.dataset.doc!==undefined){abrirDoc(+t.dataset.doc)}
+ else if(t.dataset.unpin!==undefined){PINS[selPac].splice(+t.dataset.unpin,1);render()}
+ else if(t.dataset.addpin!==undefined){modalPin()}
+});
+function modalPin(){const L=document.getElementById('layer');L.innerHTML=`<div class="ov" data-close><div class="modal" role="dialog" aria-modal="true"><h2 style="font-family:var(--display);font-size:22px;font-weight:600;margin:0 0 4px">Nota fixa</h2><p class="small muted" style="margin-top:0">Fica no topo da ficha para as duas médicas e a recepção.</p><form id="fp" class="grid" style="gap:12px"><label class="f">Nota<input id="p-t" maxlength="90" placeholder="Ex.: prefere ser chamada de Fê"></label><div style="display:flex;justify-content:flex-end;gap:8px"><button type="button" class="btn ghost" data-close>Cancelar</button><button class="btn" type="submit">Fixar</button></div></form></div></div>`;
+ document.getElementById('p-t').focus();
+ document.getElementById('fp').addEventListener('submit',e=>{e.preventDefault();const v=document.getElementById('p-t').value.trim();if(v){PINS[selPac].push(v)}L.innerHTML='';render()})}
+let pendAnexos=[];
+V.addEventListener('submit',e=>{if(e.target.matches('[data-addpre]')){e.preventDefault();const v=gv('pre-new');if(v){const c=CIR.find(x=>x.id===selCir);c.pre.push([v,false]);c.status='Pendências';render()}return}
+ if(e.target.id!=='fe')return;e.preventDefault();
+ const g=id=>(document.getElementById(id)||{}).value||'';
+ const campos=[['Motivo',g('e-1')],[autor==='marcela'?'Exame físico':'Avaliação',g('e-2')],['Conduta',g('e-3')]].filter(c=>c[1].trim());
+ if(!campos.length){toast('Escreva ao menos um campo para salvar');return}
+ const ev={id:'n'+Date.now(),data:g('e-data')||'16/10/2026',hora:new Date().toTimeString().slice(0,5),med:autor,tipo:g('e-tipo'),campos,anexos:pendAnexos.map(a=>a.n),novo:true};
+ if(autor==='rafaela'&&(g('e-peso')||g('e-gord'))){ev.medidas={peso:g('e-peso')?g('e-peso')+' kg':'',gordura:g('e-gord')?g('e-gord')+'%':'',imc:g('e-imc')}}
+ evolDe(pacBy(selPac)).unshift(ev);
+ pendAnexos.forEach(a=>DOCSPAC[selPac].unshift({...a,tipo:a.src?'Foto':'Outro',data:'16/10',med:autor}));
+ pendAnexos=[];evolFiltro='todas';render();toast('Evolução salva na ficha');
+});
+function addDocs(files){lerArquivos(files,out=>{const tp=(document.getElementById('d-tipo')||{}).value||'Outro';out.forEach(a=>DOCSPAC[selPac].unshift({...a,tipo:a.src&&tp==='Outro'?'Foto':tp,data:'16/10',med:autor}));docFiltro='Todos';render();toast(out.length>1?out.length+' arquivos anexados':'Arquivo anexado')})}
+V.addEventListener('dragover',e=>{const d=e.target.closest('.drop');if(d){e.preventDefault();d.classList.add('over')}});
+V.addEventListener('dragleave',e=>{const d=e.target.closest('.drop');if(d)d.classList.remove('over')});
+V.addEventListener('drop',e=>{const d=e.target.closest('.drop');if(d){e.preventDefault();addDocs(e.dataTransfer.files)}});
+V.addEventListener('change',e=>{
+ if(e.target.id==='d-file'){addDocs(e.target.files);return}
+ if(e.target.id==='e-file'){lerArquivos(e.target.files,out=>{pendAnexos=out;const fn=document.getElementById('e-fn');if(fn)fn.textContent=' · '+out.map(o=>o.n).join(', ')});return}
+if(e.target.dataset.pre!==undefined){const c=CIR.find(x=>x.id===selCir);c.pre[+e.target.dataset.pre][1]=e.target.checked;c.status=c.pre.every(x=>x[1])?'Confirmada':'Pendências';render()}});
+V.addEventListener('input',e=>{if(e.target.id==='q'){pacQ=e.target.value;render();const q=document.getElementById('q');q.focus();q.setSelectionRange(pacQ.length,pacQ.length)}});
+function render(){
+ save();
+ document.getElementById('nav').innerHTML=navHTML(); mob.value=route;
+ V.innerHTML=({painel:vPainel,pacientes:vPacientes,'fin-clinica':vFinClinica,'ag-marcela':()=>vAgenda('marcela'),cirurgias:vCirurgias,'fin-marcela':()=>vFin('marcela'),'ag-rafaela':()=>vAgenda('rafaela'),acomp:vAcomp,'fin-rafaela':()=>vFin('rafaela')}[route]||vPainel)();
+}
+load();route='painel';
+render();
+</script>
+
+</body>
+</html>
